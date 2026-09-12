@@ -18,6 +18,12 @@ export interface User {
   emergencyContact?: string;
   password?: string;
   bio?: string;
+  // Supabase relational foreign key references
+  departmentId?: string;
+  programId?: string;
+  semesterId?: string;
+  sectionId?: string;
+  batchId?: string;
 }
 
 export interface TimetableEntry {

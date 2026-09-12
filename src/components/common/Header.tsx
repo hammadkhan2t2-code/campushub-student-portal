@@ -18,7 +18,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
 import { ActiveTab } from '../../types';
-import { getStudentEnrolledClasses } from '../../utils/studentScheduleUtils';
+import { getStudentEnrolledClasses, getPeshawarDateTime } from '../../utils/studentScheduleUtils';
 import { formatUserRollNumber } from '../../utils/rollNumberUtils';
 
 export const Header: React.FC = () => {
@@ -37,11 +37,14 @@ export const Header: React.FC = () => {
     { id: 'profile', label: 'Student Profile', icon: UserCircle }
   ];
 
-  // Quick stats for notifications
+  // Quick stats for notifications using current Pakistan/Peshawar time
+  const peshawarTime = getPeshawarDateTime();
   const recentLostFound = lostFoundItems.slice(0, 3);
-  const todaysClassesCount = currentUser
-    ? getStudentEnrolledClasses(timetable, currentUser).filter((c) => c.day === 'Monday').length
-    : timetable.filter((c) => c.day === 'Monday' && c.section === 'A').length;
+  const todaysClassesCount = peshawarTime.isWeekend
+    ? 0
+    : currentUser
+    ? getStudentEnrolledClasses(timetable, currentUser).filter((c) => c.day === peshawarTime.weekday).length
+    : timetable.filter((c) => c.day === peshawarTime.weekday && c.section === 'A').length;
 
   return (
     <header className="sticky top-0 z-40 bg-[#0F172A] text-white border-b border-slate-800 shadow-md">

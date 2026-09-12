@@ -27,8 +27,26 @@ import { formatUserRollNumber } from '../../utils/rollNumberUtils';
 const DAYS: DayOfWeek[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 export const TimetablePage: React.FC = () => {
-  const { timetable, setSelectedRoom, setSelectedTeacher, setActiveTab, rooms, teachers } = useApp();
+  const {
+    timetable,
+    setSelectedRoom,
+    setSelectedTeacher,
+    setActiveTab,
+    rooms,
+    teachers,
+    departments,
+    programs,
+    semesters,
+    sections,
+    batches
+  } = useApp();
   const { currentUser, openAuthModal } = useAuth();
+
+  const departmentOptions = departments.length > 0 ? departments.map((d) => d.name) : DEPARTMENTS;
+  const degreeOptions = programs.length > 0 ? programs.map((p) => p.name) : DEGREES;
+  const semesterOptions = semesters.length > 0 ? semesters.map((s) => s.name) : SEMESTERS;
+  const sectionOptions = sections.length > 0 ? sections.map((s) => s.name) : SECTIONS;
+  const batchOptions = batches.length > 0 ? batches.map((b) => b.name) : BATCHES;
 
   // Mode: 'enrolled' for student's auto-filtered classes, 'university' for campus-wide directory / admin
   const [viewMode, setViewMode] = useState<'enrolled' | 'university'>(currentUser ? 'enrolled' : 'university');
@@ -355,7 +373,7 @@ export const TimetablePage: React.FC = () => {
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
                   <option value="All">All Departments</option>
-                  {DEPARTMENTS.map((d) => (
+                  {departmentOptions.map((d) => (
                     <option key={d} value={d}>
                       {d}
                     </option>
@@ -374,7 +392,7 @@ export const TimetablePage: React.FC = () => {
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
                   <option value="All">All Programs</option>
-                  {DEGREES.map((deg) => (
+                  {degreeOptions.map((deg) => (
                     <option key={deg} value={deg}>
                       {deg}
                     </option>
@@ -393,7 +411,7 @@ export const TimetablePage: React.FC = () => {
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
                   <option value="All">All Semesters</option>
-                  {SEMESTERS.map((s) => (
+                  {semesterOptions.map((s) => (
                     <option key={s} value={s}>
                       {s} Semester
                     </option>
@@ -412,7 +430,7 @@ export const TimetablePage: React.FC = () => {
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
                   <option value="All">All Sections (A, B)</option>
-                  {SECTIONS.map((sec) => (
+                  {sectionOptions.map((sec) => (
                     <option key={sec} value={sec}>
                       Section {sec}
                     </option>
@@ -431,7 +449,7 @@ export const TimetablePage: React.FC = () => {
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none truncate"
                 >
                   <option value="All">All Batches</option>
-                  {BATCHES.map((b) => (
+                  {batchOptions.map((b) => (
                     <option key={b} value={b}>
                       {b}
                     </option>

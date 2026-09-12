@@ -15,7 +15,8 @@ import {
   Save,
   Clock,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -27,9 +28,24 @@ import { formatRollNumber, formatUserRollNumber } from '../../utils/rollNumberUt
 
 export const StudentProfilePage: React.FC = () => {
   const { currentUser, updateProfile, signOut, openAuthModal } = useAuth();
-  const { timetable, setActiveTab } = useApp();
+  const {
+    timetable,
+    setActiveTab,
+    departments,
+    programs,
+    semesters,
+    sections,
+    batches
+  } = useApp();
+
+  const departmentOptions = departments.length > 0 ? departments.map((d) => d.name) : DEPARTMENTS;
+  const degreeOptions = programs.length > 0 ? programs.map((p) => p.name) : DEGREES;
+  const semesterOptions = semesters.length > 0 ? semesters.map((s) => s.name) : SEMESTERS;
+  const sectionOptions = sections.length > 0 ? sections.map((s) => s.name) : SECTIONS;
+  const batchOptions = batches.length > 0 ? batches.map((b) => b.name) : BATCHES;
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [phone, setPhone] = useState(currentUser?.phone || '');
   const [department, setDepartment] = useState(currentUser?.department || 'Computer Science');
   const [degree, setDegree] = useState(currentUser?.degree || 'BS Computer Science');
@@ -89,7 +105,7 @@ export const StudentProfilePage: React.FC = () => {
 
   const totalCredits = uniqueCourses.reduce((sum, c) => sum + c.creditHours, 0);
 
-  const handleSaveProfile = (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     if (showPasswordSection && newPassword) {
       if (newPassword.length < 6) {
@@ -102,24 +118,34 @@ export const StudentProfilePage: React.FC = () => {
       }
     }
 
-    updateProfile({
-      phone: phone.trim(),
-      rollNumber: formatRollNumber(rollNumber, degree),
-      department,
-      degree,
-      semester,
-      section,
-      admissionBatch,
-      expectedGraduationYear: Number(expectedGraduationYear) || 2029,
-      ...(newPassword ? { password: newPassword } : {})
-    });
+    setIsSaving(true);
+    try {
+      const result = await updateProfile({
+        phone: phone.trim(),
+        rollNumber: formatRollNumber(rollNumber, degree),
+        department,
+        degree,
+        semester,
+        section,
+        admissionBatch,
+        expectedGraduationYear: Number(expectedGraduationYear) || 2029,
+        ...(newPassword ? { password: newPassword } : {})
+      });
 
-    setIsEditing(false);
-    setShowPasswordSection(false);
-    setNewPassword('');
-    setConfirmPassword('');
-    setMessage({ type: 'success', text: 'Student profile updated successfully. Your enrolled classes and timetable have refreshed!' });
-    setTimeout(() => setMessage(null), 4000);
+      if (!result.success) {
+        setMessage({ type: 'error', text: result.error || 'Failed to update profile.' });
+        return;
+      }
+
+      setIsEditing(false);
+      setShowPasswordSection(false);
+      setNewPassword('');
+      setConfirmPassword('');
+      setMessage({ type: 'success', text: 'Student profile updated in Supabase successfully. Your enrolled classes and timetable have refreshed!' });
+      setTimeout(() => setMessage(null), 4000);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -273,7 +299,7 @@ export const StudentProfilePage: React.FC = () => {
                   onChange={(e) => setDepartment(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
-                  {DEPARTMENTS.map((d) => (
+                  {departmentOptions.map((d) => (
                     <option key={d} value={d}>
                       {d}
                     </option>
@@ -298,7 +324,7 @@ export const StudentProfilePage: React.FC = () => {
                   onChange={(e) => setDegree(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
-                  {DEGREES.map((deg) => (
+                  {degreeOptions.map((deg) => (
                     <option key={deg} value={deg}>
                       {deg}
                     </option>
@@ -331,7 +357,7 @@ export const StudentProfilePage: React.FC = () => {
                   }}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
-                  {BATCHES.map((b) => (
+                  {batchOptions.map((b) => (
                     <option key={b} value={b}>
                       {b}
                     </option>
@@ -378,7 +404,7 @@ export const StudentProfilePage: React.FC = () => {
                   onChange={(e) => setSemester(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
-                  {SEMESTERS.map((s) => (
+                  {semesterOptions.map((s) => (
                     <option key={s} value={s}>
                       {s} Semester
                     </option>
@@ -403,7 +429,7 @@ export const StudentProfilePage: React.FC = () => {
                   onChange={(e) => setSection(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
-                  {SECTIONS.map((sec) => (
+                  {sectionOptions.map((sec) => (
                     <option key={sec} value={sec}>
                       Section {sec}
                     </option>
@@ -503,10 +529,15 @@ export const StudentProfilePage: React.FC = () => {
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-[#0F172A] hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-1.5"
+                disabled={isSaving}
+                className="px-5 py-2 bg-[#0F172A] hover:bg-slate-800 disabled:opacity-60 text-white rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-1.5"
               >
-                <Save size={14} className="text-[#C5A059]" />
-                <span>Save Profile Changes</span>
+                {isSaving ? (
+                  <Loader2 size={14} className="animate-spin text-[#C5A059]" />
+                ) : (
+                  <Save size={14} className="text-[#C5A059]" />
+                )}
+                <span>{isSaving ? 'Saving to Supabase...' : 'Save Profile Changes'}</span>
               </button>
             </div>
           )}

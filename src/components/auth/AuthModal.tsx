@@ -13,9 +13,11 @@ import {
   Sparkles,
   ArrowRight,
   ShieldCheck,
-  Check
+  Check,
+  Loader2
 } from 'lucide-react';
 import { useAuth, RegisterData } from '../../context/AuthContext';
+import { useApp } from '../../context/AppContext';
 import { DEPARTMENTS, DEGREES, SEMESTERS, SECTIONS, BATCHES } from '../../data/mockData';
 import { RollNumberInput } from '../common/RollNumberInput';
 import { formatRollNumber } from '../../utils/rollNumberUtils';
@@ -30,12 +32,21 @@ export const AuthModal: React.FC = () => {
     signUp,
     resetPassword
   } = useAuth();
+  const { departments, programs, semesters, sections, batches } = useApp();
+
+  // Dynamic dropdown lists loaded from Supabase tables with fallback
+  const departmentOptions = departments.length > 0 ? departments.map((d) => d.name) : DEPARTMENTS;
+  const degreeOptions = programs.length > 0 ? programs.map((p) => p.name) : DEGREES;
+  const semesterOptions = semesters.length > 0 ? semesters.map((s) => s.name) : SEMESTERS;
+  const sectionOptions = sections.length > 0 ? sections.map((s) => s.name) : SECTIONS;
+  const batchOptions = batches.length > 0 ? batches.map((b) => b.name) : BATCHES;
 
   // Sign In Form State - Clean empty state
   const [signInIdentifier, setSignInIdentifier] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [signInError, setSignInError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Register Form State (All 12 fields)
   const [regData, setRegData] = useState<RegisterData>({
@@ -48,9 +59,9 @@ export const AuthModal: React.FC = () => {
     degree: 'BS Computer Science',
     semester: '1st',
     section: 'A',
-    admissionBatch: 'Fall 2025 – 2029',
-    admissionYear: 2025,
-    expectedGraduationYear: 2029,
+    admissionBatch: 'Fall 2026 – 2030',
+    admissionYear: 2026,
+    expectedGraduationYear: 2030,
     phone: '',
     bio: ''
   });
@@ -66,40 +77,49 @@ export const AuthModal: React.FC = () => {
 
   if (!isAuthModalOpen) return null;
 
-  const handleSignInSubmit = (e: React.FormEvent) => {
+  const handleSignInSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSignInError('');
-    const result = signIn(signInIdentifier, signInPassword);
-    if (!result.success && result.error) {
-      setSignInError(result.error);
+    setIsSubmitting(true);
+    try {
+      const result = await signIn(signInIdentifier, signInPassword);
+      if (!result.success && result.error) {
+        setSignInError(result.error);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setRegError('');
-    const result = signUp(regData);
-    if (!result.success && result.error) {
-      setRegError(result.error);
+    setIsSubmitting(true);
+    try {
+      const result = await signUp(regData);
+      if (!result.success && result.error) {
+        setRegError(result.error);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleResetSubmit = (e: React.FormEvent) => {
+  const handleResetSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (resetStep === 'request') {
-      if (!resetIdentifier.trim()) {
-        setResetMessage('Please enter your roll number or university email.');
-        return;
+    if (!resetIdentifier.trim()) {
+      setResetMessage('Please enter your roll number or university email.');
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const result = await resetPassword(resetIdentifier);
+      setResetMessage(result.message);
+      if (result.success) {
+        setResetStep('done');
       }
-      setResetStep('verify');
-      setResetMessage(`A 6-digit campus verification code was dispatched to ${resetIdentifier}. Enter code '492810' to reset.`);
-    } else if (resetStep === 'verify') {
-      if (!newPassword || newPassword.length < 6) {
-        setResetMessage('New password must be at least 6 characters.');
-        return;
-      }
-      resetPassword(resetIdentifier, newPassword);
-      setResetStep('done');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -246,9 +266,11 @@ export const AuthModal: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-3 px-4 bg-[#0F172A] hover:bg-slate-800 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2"
+                disabled={isSubmitting}
+                className="w-full py-3 px-4 bg-[#0F172A] hover:bg-slate-800 disabled:opacity-60 text-white rounded-xl text-sm font-bold shadow-md hover:shadow-lg transition-all mt-2 flex items-center justify-center gap-2"
               >
-                Sign In to CampusHub
+                {isSubmitting && <Loader2 size={16} className="animate-spin text-[#C5A059]" />}
+                <span>{isSubmitting ? 'Authenticating with Supabase...' : 'Sign In to CampusHub'}</span>
               </button>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-center">
@@ -335,7 +357,7 @@ export const AuthModal: React.FC = () => {
                         }}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none font-medium h-[42px]"
                       >
-                        {DEGREES.map((deg) => (
+                        {degreeOptions.map((deg) => (
                           <option key={deg} value={deg}>
                             {deg}
                           </option>
@@ -438,7 +460,7 @@ export const AuthModal: React.FC = () => {
                         onChange={(e) => setRegData({ ...regData, department: e.target.value })}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                       >
-                        {DEPARTMENTS.map((dept) => (
+                        {departmentOptions.map((dept) => (
                           <option key={dept} value={dept}>
                             {dept}
                           </option>
@@ -455,7 +477,7 @@ export const AuthModal: React.FC = () => {
                         onChange={(e) => setRegData({ ...regData, degree: e.target.value })}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                       >
-                        {DEGREES.map((deg) => (
+                        {degreeOptions.map((deg) => (
                           <option key={deg} value={deg}>
                             {deg}
                           </option>
@@ -474,7 +496,7 @@ export const AuthModal: React.FC = () => {
                         onChange={(e) => setRegData({ ...regData, semester: e.target.value })}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                       >
-                        {SEMESTERS.map((sem) => (
+                        {semesterOptions.map((sem) => (
                           <option key={sem} value={sem}>
                             {sem} Semester
                           </option>
@@ -491,7 +513,7 @@ export const AuthModal: React.FC = () => {
                         onChange={(e) => setRegData({ ...regData, section: e.target.value })}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                       >
-                        {SECTIONS.map((sec) => (
+                        {sectionOptions.map((sec) => (
                           <option key={sec} value={sec}>
                             Section {sec}
                           </option>
@@ -509,7 +531,7 @@ export const AuthModal: React.FC = () => {
                       onChange={(e) => {
                         const val = e.target.value;
                         const match = val.match(/(\d{4})/);
-                        const startYr = match ? parseInt(match[1]) : 2025;
+                        const startYr = match ? parseInt(match[1]) : 2026;
                         setRegData({
                           ...regData,
                           admissionBatch: val,
@@ -519,7 +541,7 @@ export const AuthModal: React.FC = () => {
                       }}
                       className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                     >
-                      {BATCHES.map((b) => (
+                      {batchOptions.map((b) => (
                         <option key={b} value={b}>
                           {b}
                         </option>
@@ -539,7 +561,7 @@ export const AuthModal: React.FC = () => {
                         required
                         value={regData.admissionYear}
                         onChange={(e) =>
-                          setRegData({ ...regData, admissionYear: parseInt(e.target.value) || 2025 })
+                          setRegData({ ...regData, admissionYear: parseInt(e.target.value) || 2026 })
                         }
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                       />
@@ -558,7 +580,7 @@ export const AuthModal: React.FC = () => {
                         onChange={(e) =>
                           setRegData({
                             ...regData,
-                            expectedGraduationYear: parseInt(e.target.value) || 2029
+                            expectedGraduationYear: parseInt(e.target.value) || 2030
                           })
                         }
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
@@ -569,6 +591,7 @@ export const AuthModal: React.FC = () => {
                   <div className="flex gap-2 pt-2">
                     <button
                       type="button"
+                      disabled={isSubmitting}
                       onClick={() => setRegStep(1)}
                       className="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-all"
                     >
@@ -576,9 +599,11 @@ export const AuthModal: React.FC = () => {
                     </button>
                     <button
                       type="submit"
-                      className="flex-1 py-2.5 bg-[#0F172A] hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-md transition-all"
+                      disabled={isSubmitting}
+                      className="flex-1 py-2.5 bg-[#0F172A] hover:bg-slate-800 disabled:opacity-60 text-white rounded-xl text-xs font-bold shadow-md transition-all flex items-center justify-center gap-2"
                     >
-                      Complete Registration & Sign In
+                      {isSubmitting && <Loader2 size={15} className="animate-spin text-[#C5A059]" />}
+                      <span>{isSubmitting ? 'Registering with Supabase...' : 'Complete Registration & Sign In'}</span>
                     </button>
                   </div>
                 </div>
