@@ -17,7 +17,13 @@ import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
 import { TimetableEntry } from '../../types';
 import { formatRoomDisplay } from '../../utils/roomUtils';
-import { getStudentEnrolledClasses, formatStudentAcademicContext } from '../../utils/studentScheduleUtils';
+import {
+  getStudentEnrolledClasses,
+  formatStudentAcademicContext,
+  getPeshawarDateTime,
+  getNextUpcomingClass,
+  parseTimeToMinutes
+} from '../../utils/studentScheduleUtils';
 import { formatUserRollNumber } from '../../utils/rollNumberUtils';
 
 export const DashboardView: React.FC = () => {
@@ -32,31 +38,64 @@ export const DashboardView: React.FC = () => {
     rooms
   } = useApp();
 
-  // Current formatted date in Peshawar
-  const today = new Date();
-  const options: Intl.DateTimeFormatOptions = {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  };
-  const formattedDate = today.toLocaleDateString('en-PK', options);
+  // Auto-updating state (refreshes every 30 seconds to catch midnight rollover & schedule transitions)
+  const [currentTime, setCurrentTime] = React.useState<Date>(() => new Date());
 
-  // For demonstration, map current day or default to 'Monday' for rich schedule preview
-  const dayName = 'Monday'; // Default to a packed academic day for instant rich showcase
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 30000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Dynamically calculate the current date, weekday, and Peshawar/Pakistan time
+  const {
+    weekday: currentWeekday,
+    currentMinutes,
+    isWeekend,
+    isWorkingDay,
+    formattedDate
+  } = getPeshawarDateTime(currentTime);
+
   const userSection = currentUser?.section || 'A';
 
   // Today's classes strictly for the student's enrolled courses:
   const enrolledClasses: TimetableEntry[] = currentUser
     ? getStudentEnrolledClasses(timetable, currentUser)
-    : timetable.filter((item) => item.section === 'A');
+    : getStudentEnrolledClasses(timetable, {
+        id: 'default-student',
+        firstName: 'Student',
+        lastName: '',
+        rollNumber: '26-CS-01',
+        email: '',
+        department: 'Computer Science',
+        degree: 'BS Computer Science',
+        semester: '1st',
+        section: 'A',
+        admissionBatch: 'Fall 2026 – 2030',
+        admissionYear: 2026,
+        expectedGraduationYear: 2030
+      });
 
-  const todayClasses: TimetableEntry[] = enrolledClasses.filter((item) => item.day === dayName);
+  // Monday–Friday: Show only the student's classes scheduled for that actual day.
+  // Saturday & Sunday: Non-working days. Do NOT show any Saturday or Sunday classes ([]).
+  const todayClasses: TimetableEntry[] = isWorkingDay
+    ? enrolledClasses
+        .filter((item) => item.day === currentWeekday)
+        .sort((a, b) => parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime))
+    : [];
 
-  // Next class calculation directly from student's enrolled classes
-  const nextClass = todayClasses[0] || enrolledClasses[0] || timetable[0];
+  // Next Upcoming Class calculation:
+  // - On weekday: next class today based on current time, or next working day if none remaining today.
+  // - On Saturday or Sunday: searches forward starting from Monday through Friday.
+  // - If a working day has no classes, continues searching forward through Monday–Friday.
+  const nextClassInfo = getNextUpcomingClass(enrolledClasses, currentWeekday, currentMinutes);
+  const nextClass = nextClassInfo?.entry || null;
+
   const nextTeacherObj = teachers.find((t) => t.id === nextClass?.teacherId);
-  const nextRoomObj = rooms.find((r) => r.roomNumber.toLowerCase().includes(nextClass?.classroomNumber?.toLowerCase() || ''));
+  const nextRoomObj = rooms.find((r) =>
+    r.roomNumber.toLowerCase().includes(nextClass?.classroomNumber?.toLowerCase() || '')
+  );
 
   // Recent Lost & Found updates (latest 4 items)
   const recentLostFound = lostFoundItems.slice(0, 4);
@@ -84,7 +123,12 @@ export const DashboardView: React.FC = () => {
               <Calendar size={15} className="text-[#C5A059]" />
               <span className="font-medium text-slate-700">{formattedDate}</span>
               <span className="text-slate-300">•</span>
-              <span>Today&apos;s Schedule: <span className="font-semibold text-slate-800">{dayName}</span></span>
+              <span>
+                Today&apos;s Schedule:{' '}
+                <span className="font-semibold text-slate-800">
+                  {isWeekend ? 'No classes today' : currentWeekday}
+                </span>
+              </span>
             </p>
           </div>
 
@@ -131,19 +175,34 @@ export const DashboardView: React.FC = () => {
                 <span>Next Upcoming Class</span>
               </span>
               <span className="text-xs text-slate-400 font-mono">
-                Starts at {nextClass?.startTime || '08:30 AM'}
+                {nextClassInfo?.startsLabel || 'No scheduled classes'}
               </span>
             </div>
 
             <div className="mt-2">
-              <div className="flex items-center gap-2 text-slate-400 text-xs font-mono">
-                <span>{nextClass?.courseCode || 'SE-302'}</span>
-                <span>•</span>
-                <span className="text-amber-200">{nextClass?.type || 'Lecture'}</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1 tracking-tight">
-                {nextClass?.courseName || 'Software Design & Architecture'}
-              </h2>
+              {nextClass ? (
+                <>
+                  <div className="flex items-center gap-2 text-slate-400 text-xs font-mono">
+                    <span>{nextClass.courseCode}</span>
+                    <span>•</span>
+                    <span className="text-amber-200">{nextClass.type}</span>
+                    <span>•</span>
+                    <span className="text-emerald-400 font-semibold">{nextClass.day}</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1 tracking-tight">
+                    {nextClass.courseName}
+                  </h2>
+                </>
+              ) : (
+                <>
+                  <div className="text-slate-400 text-xs font-mono">
+                    <span>Academic Schedule</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white mt-1 tracking-tight">
+                    No Upcoming Classes Scheduled
+                  </h2>
+                </>
+              )}
             </div>
 
             {/* Next Classroom & Next Teacher Prominent Highlighting */}
@@ -171,7 +230,7 @@ export const DashboardView: React.FC = () => {
                   {formatRoomDisplay(nextClass?.classroomNumber) || 'Room 1'}
                 </p>
                 <p className="text-xs text-slate-400 truncate mt-0.5">
-                  {nextClass?.building || 'Takbeer Block (CS & SE)'}
+                  {nextClass?.building || 'Academic Complex'}
                 </p>
               </button>
 
@@ -207,7 +266,7 @@ export const DashboardView: React.FC = () => {
           <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
             <span className="flex items-center gap-1">
               <CheckCircle2 size={13} className="text-emerald-400" />
-              Attendance status verified
+              <span>{isWeekend ? 'Campus closed for weekend' : 'Attendance status verified'}</span>
             </span>
             <button
               onClick={() => setActiveTab('timetable')}
@@ -217,6 +276,7 @@ export const DashboardView: React.FC = () => {
             </button>
           </div>
         </div>
+
 
         {/* Academic Quick Portal Links */}
         <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between">
@@ -330,7 +390,9 @@ export const DashboardView: React.FC = () => {
                 <Calendar size={16} />
               </div>
               <div>
-                <h2 className="text-base font-bold text-slate-900">Today&apos;s Classes ({dayName})</h2>
+                <h2 className="text-base font-bold text-slate-900">
+                  Today&apos;s Classes ({isWeekend ? 'No classes today' : currentWeekday})
+                </h2>
                 <p className="text-xs text-slate-500">
                   {currentUser ? formatStudentAcademicContext(currentUser) : `Section ${userSection} • Computer Science`}
                 </p>
@@ -348,8 +410,16 @@ export const DashboardView: React.FC = () => {
           {todayClasses.length === 0 ? (
             <div className="p-10 text-center text-slate-400">
               <Calendar size={36} className="mx-auto mb-2 text-slate-300" />
-              <p className="text-sm font-semibold text-slate-700">No classes scheduled for today</p>
-              <p className="text-xs text-slate-500 mt-1">Enjoy your study free day or visit the central library.</p>
+              <p className="text-sm font-semibold text-slate-700">
+                {isWeekend ? 'No classes today' : 'No classes scheduled for today'}
+              </p>
+              <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
+                {isWeekend
+                  ? `Academic working days are Monday through Friday. Your next upcoming class ${
+                      nextClassInfo ? nextClassInfo.startsLabel.toLowerCase() : 'starts Monday'
+                    }.`
+                  : 'Enjoy your study-free day or visit the campus library.'}
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">

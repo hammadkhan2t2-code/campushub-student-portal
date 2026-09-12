@@ -162,3 +162,196 @@ export function formatStudentAcademicContext(user: User | null | undefined): str
   const batch = user.admissionBatch || 'Fall 2025–2029';
   return `${degree} · Semester ${sem} · Section ${sec} · ${batch}`;
 }
+
+/**
+ * Parses time strings such as "08:00 AM", "1:30 PM", "12:00 PM" into total minutes from midnight.
+ */
+export function parseTimeToMinutes(timeStr: string | undefined | null): number {
+  if (!timeStr) return 0;
+  const match = timeStr.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+  if (!match) return 0;
+  let hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+  const meridiem = match[3]?.toUpperCase();
+
+  if (meridiem === 'PM' && hours < 12) {
+    hours += 12;
+  } else if (meridiem === 'AM' && hours === 12) {
+    hours = 0;
+  }
+  return hours * 60 + minutes;
+}
+
+export const ACADEMIC_WORKING_DAYS: DayOfWeek[] = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday'
+];
+
+export interface PeshawarDateTimeInfo {
+  date: Date;
+  weekday: string; // 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday'
+  currentMinutes: number; // 0 to 1439
+  isWeekend: boolean;
+  isWorkingDay: boolean;
+  formattedDate: string;
+}
+
+/**
+ * Computes the current date, time, weekday, and weekend status in the Pakistan/Peshawar timezone.
+ */
+export function getPeshawarDateTime(refDate: Date = new Date()): PeshawarDateTimeInfo {
+  try {
+    const dtf = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Karachi',
+      weekday: 'long',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false
+    });
+
+    const parts = dtf.formatToParts(refDate);
+    const map: Record<string, string> = {};
+    for (const part of parts) {
+      map[part.type] = part.value;
+    }
+
+    const weekday = map.weekday || 'Monday';
+    let hour = parseInt(map.hour, 10) || 0;
+    if (hour === 24) hour = 0;
+    const minute = parseInt(map.minute, 10) || 0;
+    const currentMinutes = hour * 60 + minute;
+
+    const isWeekend = weekday === 'Saturday' || weekday === 'Sunday';
+    const isWorkingDay = !isWeekend && ACADEMIC_WORKING_DAYS.includes(weekday as DayOfWeek);
+
+    const displayFormatter = new Intl.DateTimeFormat('en-PK', {
+      timeZone: 'Asia/Karachi',
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    const formattedDate = displayFormatter.format(refDate);
+
+    return {
+      date: refDate,
+      weekday,
+      currentMinutes,
+      isWeekend,
+      isWorkingDay,
+      formattedDate
+    };
+  } catch (err) {
+    // Resilient fallback to local system time if Intl fails
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const weekday = days[refDate.getDay()];
+    const isWeekend = weekday === 'Sunday' || weekday === 'Saturday';
+    const currentMinutes = refDate.getHours() * 60 + refDate.getMinutes();
+    return {
+      date: refDate,
+      weekday,
+      currentMinutes,
+      isWeekend,
+      isWorkingDay: !isWeekend,
+      formattedDate: refDate.toLocaleDateString('en-PK', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+    };
+  }
+}
+
+export interface NextUpcomingClassInfo {
+  entry: TimetableEntry;
+  dayLabel: string;
+  startsLabel: string; // e.g. "Starts Monday at 08:00 AM", "Starts at 08:30 AM"
+  isToday: boolean;
+}
+
+/**
+ * Determines the next scheduled class for the student:
+ * - On a weekday (Monday-Friday): looks for remaining classes today based on current time.
+ *   If no remaining classes today, searches forward through subsequent working days.
+ * - On Saturday or Sunday: searches forward starting from Monday through Friday.
+ * - If a working day has no classes, continues searching until the next scheduled class is found.
+ */
+export function getNextUpcomingClass(
+  enrolledClasses: TimetableEntry[],
+  currentWeekday: string,
+  currentMinutes: number
+): NextUpcomingClassInfo | null {
+  if (!enrolledClasses || enrolledClasses.length === 0) {
+    return null;
+  }
+
+  const isWorking = ACADEMIC_WORKING_DAYS.includes(currentWeekday as DayOfWeek);
+
+  if (isWorking) {
+    const todayClasses = enrolledClasses
+      .filter((c) => c.day === currentWeekday)
+      .sort((a, b) => parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime));
+
+    // Look for classes today that haven't ended yet
+    const remainingToday = todayClasses.filter(
+      (c) => parseTimeToMinutes(c.endTime) > currentMinutes
+    );
+
+    if (remainingToday.length > 0) {
+      const target = remainingToday[0];
+      const hasStarted = parseTimeToMinutes(target.startTime) <= currentMinutes;
+      return {
+        entry: target,
+        dayLabel: currentWeekday,
+        startsLabel: hasStarted
+          ? `In progress (ends at ${target.endTime})`
+          : `Starts at ${target.startTime}`,
+        isToday: true
+      };
+    }
+
+    // No remaining classes today: search forward through the remaining days of the week (wrap-around)
+    const currentIdx = ACADEMIC_WORKING_DAYS.indexOf(currentWeekday as DayOfWeek);
+    for (let i = 1; i <= 5; i++) {
+      const nextDay = ACADEMIC_WORKING_DAYS[(currentIdx + i) % 5];
+      const dayClasses = enrolledClasses
+        .filter((c) => c.day === nextDay)
+        .sort((a, b) => parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime));
+
+      if (dayClasses.length > 0) {
+        return {
+          entry: dayClasses[0],
+          dayLabel: nextDay,
+          startsLabel: `Starts ${nextDay} at ${dayClasses[0].startTime}`,
+          isToday: false
+        };
+      }
+    }
+  } else {
+    // Saturday or Sunday: look ahead starting from Monday
+    for (const day of ACADEMIC_WORKING_DAYS) {
+      const dayClasses = enrolledClasses
+        .filter((c) => c.day === day)
+        .sort((a, b) => parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime));
+
+      if (dayClasses.length > 0) {
+        return {
+          entry: dayClasses[0],
+          dayLabel: day,
+          startsLabel: `Starts ${day} at ${dayClasses[0].startTime}`,
+          isToday: false
+        };
+      }
+    }
+  }
+
+  return null;
+}
+
