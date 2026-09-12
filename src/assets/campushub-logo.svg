@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 520" width="460" height="520" fill="none">
+  <!-- CampusHub Official CH Monogram Logo (Transparent Background) -->
+  <g id="campushub-logo">
+    <!-- Mortarboard Diamond Top Surface -->
+    <polygon points="72,138 244,98 406,182 232,224" fill="#FFFFFF" />
+
+    <!-- Underside Left Bevel / Thickness -->
+    <polygon points="72,138 108,188 232,224" fill="#E2E8F0" />
+
+    <!-- Skullcap Band underneath -->
+    <path d="M 112,176 L 112,204 C 112,238 206,252 320,214 L 320,202 Z" fill="#FFFFFF" />
+
+    <!-- Top Button / Rivet -->
+    <ellipse cx="238" cy="158" rx="7" ry="4.5" fill="#0B131F" stroke="#FFFFFF" stroke-width="2" />
+
+    <!-- Tassel Cord on Cap (dark across white top) -->
+    <path d="M 238,158 C 274,162 334,172 360,192" 
+          stroke="#0B131F" stroke-width="4.5" stroke-linecap="round" fill="none" />
+
+    <!-- Tassel Cord hanging off the edge (pure white) -->
+    <path d="M 360,192 C 378,206 406,220 408,242 C 410,264 378,284 358,298" 
+          stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" fill="none" />
+
+    <!-- Tassel Knot / Ring -->
+    <ellipse cx="357" cy="300" rx="5.5" ry="4" fill="#FFFFFF" />
+
+    <!-- Flowing Tassel Fringe Strands (draping over top of H) -->
+    <path d="M 355,302 C 350,322 334,342 318,358" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <path d="M 356,302 C 354,324 342,345 328,362" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <path d="M 357,302 C 358,326 352,348 340,365" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <path d="M 358,302 C 361,326 360,348 352,363" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <path d="M 359,302 C 365,324 368,345 364,357" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" fill="none" />
+
+    <!-- Letter 'C' (Classic Roman Serif Monogram) -->
+    <!-- Bounds: x from 32 to 208, y from 270 to 480 -->
+    <path d="M 198,302 L 186,334 C 174,312 152,298 122,298 C 76,298 54,338 54,390 C 54,442 76,482 122,482 C 152,482 176,466 192,440 L 204,464 C 182,492 150,508 116,508 C 50,508 20,458 20,390 C 20,322 52,272 116,272 C 150,272 180,284 198,302 Z" 
+          fill="#FFFFFF" />
+
+    <!-- Letter 'H' (Classic Roman Serif Monogram) -->
+    <!-- Bounds: x from 218 to 408, y from 280 to 498 -->
+    <!-- Left Column: x around 246..276; Right Column: x around 350..380 -->
+    <path d="M 218,280 L 280,280 L 280,290 C 270,292 266,296 266,306 L 266,378 L 360,378 L 360,306 C 360,296 356,292 346,290 L 346,280 L 408,280 L 408,290 C 398,292 394,296 394,306 L 394,472 C 394,482 398,486 408,488 L 408,498 L 346,498 L 346,488 C 356,486 360,482 360,472 L 360,402 L 266,402 L 266,472 C 266,482 270,486 280,488 L 280,498 L 218,498 L 218,488 C 228,486 232,482 232,472 L 232,306 C 232,296 228,292 218,290 Z" 
+          fill="#FFFFFF" />
+  </g>
+</svg>
