@@ -11,8 +11,8 @@ export const isSupabaseConfigured = Boolean(
 );
 
 if (!isSupabaseConfigured) {
-  console.info(
-    'Supabase environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY) are not set. CampusHub is running in high-fidelity offline/local mode with built-in university records.'
+  console.warn(
+    'Supabase environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY) are not set. CampusHub requires Supabase as single source of truth; displaying database connection error / empty state.'
   );
 }
 

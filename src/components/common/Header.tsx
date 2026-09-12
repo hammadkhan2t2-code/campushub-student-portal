@@ -167,10 +167,14 @@ export const Header: React.FC = () => {
                       </div>
                       <div>
                         <p className="font-semibold text-amber-900">
-                          {recentLostFound.length} recent Lost & Found notices
+                          {recentLostFound.length > 0
+                            ? `${recentLostFound.length} recent Lost & Found notices`
+                            : 'Lost & Found Registry'}
                         </p>
                         <p className="text-amber-700 mt-0.5">
-                          Latest: {recentLostFound[0]?.itemName}
+                          {recentLostFound[0]
+                            ? `Latest: ${recentLostFound[0].itemName}`
+                            : 'No lost or found items currently reported'}
                         </p>
                       </div>
                     </div>

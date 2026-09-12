@@ -21,7 +21,6 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
 import { TimetableEntry } from '../../types';
-import { DEPARTMENTS, DEGREES, SEMESTERS, SECTIONS, BATCHES } from '../../data/mockData';
 import { getStudentEnrolledClasses, formatStudentAcademicContext } from '../../utils/studentScheduleUtils';
 import { RollNumberInput } from '../common/RollNumberInput';
 import { formatRollNumber, formatUserRollNumber } from '../../utils/rollNumberUtils';
@@ -38,11 +37,11 @@ export const StudentProfilePage: React.FC = () => {
     batches
   } = useApp();
 
-  const departmentOptions = departments.length > 0 ? departments.map((d) => d.name) : DEPARTMENTS;
-  const degreeOptions = programs.length > 0 ? programs.map((p) => p.name) : DEGREES;
-  const semesterOptions = semesters.length > 0 ? semesters.map((s) => s.name) : SEMESTERS;
-  const sectionOptions = sections.length > 0 ? sections.map((s) => s.name) : SECTIONS;
-  const batchOptions = batches.length > 0 ? batches.map((b) => b.name) : BATCHES;
+  const departmentOptions = departments.map((d) => d.name);
+  const degreeOptions = programs.map((p) => p.name);
+  const semesterOptions = semesters.map((s) => s.name);
+  const sectionOptions = sections.map((s) => s.name);
+  const batchOptions = batches.map((b) => b.name);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);

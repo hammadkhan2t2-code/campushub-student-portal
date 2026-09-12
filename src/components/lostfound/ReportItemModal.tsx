@@ -15,7 +15,6 @@ import {
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
 import { ItemCategory, ItemType, LostFoundItem } from '../../types';
-import { ROOMS } from '../../data/mockData';
 import { formatRoomDisplay } from '../../utils/roomUtils';
 import { LOST_FOUND_CONTACT_CONFIG } from '../../utils/lostFoundContact';
 
@@ -37,7 +36,7 @@ export const ReportItemModal: React.FC<ReportItemModalProps> = ({
   initialType = 'lost',
   onClose
 }) => {
-  const { addLostFoundItem } = useApp();
+  const { addLostFoundItem, rooms } = useApp();
   const { currentUser } = useAuth();
 
   const [type, setType] = useState<ItemType>(initialType);
@@ -45,7 +44,7 @@ export const ReportItemModal: React.FC<ReportItemModalProps> = ({
   const [category, setCategory] = useState<ItemCategory>('Electronics');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
-  const [room, setRoom] = useState('CS-101');
+  const [room, setRoom] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [approximateTime, setApproximateTime] = useState('11:00 AM');
   const [contactMethod, setContactMethod] = useState(
@@ -231,7 +230,7 @@ export const ReportItemModal: React.FC<ReportItemModalProps> = ({
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
               >
                 <option value="">None / Open Area</option>
-                {ROOMS.map((r) => (
+                {rooms.map((r) => (
                   <option key={r.id} value={r.roomNumber}>
                     {formatRoomDisplay(r.roomNumber)} ({r.building.split(' ')[0]})
                   </option>

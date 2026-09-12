@@ -28,19 +28,9 @@ import {
   fetchLostFoundItems,
   createLostFoundItem,
   claimLostFoundItem,
-  updateLostFoundItemStatus
+  updateLostFoundItemStatus,
+  isSupabaseConfigured
 } from '../lib/supabaseService';
-import {
-  ROOMS,
-  TEACHERS,
-  TIMETABLE_ENTRIES,
-  INITIAL_LOST_FOUND,
-  DEPARTMENTS,
-  DEGREES,
-  SEMESTERS,
-  SECTIONS,
-  BATCHES
-} from '../data/mockData';
 import { useAuth } from './AuthContext';
 
 export interface ToastMessage {
@@ -54,7 +44,7 @@ interface AppContextType {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
   
-  // Supabase Data
+  // Supabase Data (Single source of truth)
   timetable: TimetableEntry[];
   rooms: Room[];
   teachers: Teacher[];
@@ -66,9 +56,10 @@ interface AppContextType {
   batches: BatchRecord[];
   courses: CourseRecord[];
 
-  // Data Loading & Error States
+  // Data Loading & Connection States
   isLoadingData: boolean;
   dataError: string | null;
+  isDbConnected: boolean;
   refreshData: () => Promise<void>;
 
   // Modals & Selection
@@ -102,29 +93,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const { currentUser } = useAuth();
 
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
-  const [timetable, setTimetable] = useState<TimetableEntry[]>(TIMETABLE_ENTRIES);
-  const [rooms, setRooms] = useState<Room[]>(ROOMS);
-  const [teachers, setTeachers] = useState<Teacher[]>(TEACHERS);
-  const [lostFoundItems, setLostFoundItems] = useState<LostFoundItem[]>(INITIAL_LOST_FOUND);
-  const [departments, setDepartments] = useState<DepartmentRecord[]>(
-    DEPARTMENTS.map((d, i) => ({ id: `dept-${i + 1}`, name: d, code: d.substring(0, 3).toUpperCase(), created_at: '' }))
-  );
-  const [programs, setPrograms] = useState<ProgramRecord[]>(
-    DEGREES.map((deg, i) => ({ id: `prog-${i + 1}`, name: deg, code: deg.replace('BS ', '').substring(0, 2).toUpperCase(), department_id: 'dept-1', duration_years: 4, created_at: '' }))
-  );
-  const [semesters, setSemesters] = useState<SemesterRecord[]>(
-    SEMESTERS.map((s, i) => ({ id: `sem-${i + 1}`, name: s, number: parseInt(s) || (i * 2 + 1), created_at: '' }))
-  );
-  const [sections, setSections] = useState<SectionRecord[]>(
-    SECTIONS.map((sec, i) => ({ id: `sec-${i + 1}`, name: sec, created_at: '' }))
-  );
-  const [batches, setBatches] = useState<BatchRecord[]>(
-    BATCHES.map((b, i) => ({ id: `batch-${i + 1}`, name: b, start_year: 2026 - i, end_year: 2030 - i, is_active: i === 0, created_at: '' }))
-  );
+  // Pure empty initial state - NEVER preloaded with local/mock data
+  const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [lostFoundItems, setLostFoundItems] = useState<LostFoundItem[]>([]);
+  const [departments, setDepartments] = useState<DepartmentRecord[]>([]);
+  const [programs, setPrograms] = useState<ProgramRecord[]>([]);
+  const [semesters, setSemesters] = useState<SemesterRecord[]>([]);
+  const [sections, setSections] = useState<SectionRecord[]>([]);
+  const [batches, setBatches] = useState<BatchRecord[]>([]);
   const [courses, setCourses] = useState<CourseRecord[]>([]);
 
   const [isLoadingData, setIsLoadingData] = useState<boolean>(true);
   const [dataError, setDataError] = useState<string | null>(null);
+  const [isDbConnected, setIsDbConnected] = useState<boolean>(true);
 
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
@@ -148,14 +131,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   /**
    * Load all datasets directly from Supabase tables:
-   * departments, programs, semesters, sections, batches, courses, teachers, rooms, timetable_entries, lost_and_found
+   * departments, programs, semesters, sections, batches, courses, teachers, rooms, timetable_entries, lost_and_found.
+   *
+   * Supabase is strictly the single source of truth:
+   * - Supabase available → use Supabase data.
+   * - Supabase unavailable → show database connection error / empty state.
+   * - NEVER substitute local or mock data.
    */
   const loadSupabaseData = useCallback(async () => {
     setIsLoadingData(true);
     setDataError(null);
 
+    // If Supabase credentials are missing, immediately flag database connection error and keep empty state
+    if (!isSupabaseConfigured()) {
+      setIsDbConnected(false);
+      setDataError('Supabase environment variables are not configured. Cannot connect to database.');
+      setIsLoadingData(false);
+      return;
+    }
+
     try {
-      // 1. Fetch metadata in parallel
+      // 1. Fetch metadata in parallel from Supabase tables
       const [
         deptData,
         progData,
@@ -178,18 +174,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         fetchLostFoundItems()
       ]);
 
-      if (deptData.length > 0) setDepartments(deptData);
-      if (progData.length > 0) setPrograms(progData);
-      if (semData.length > 0) setSemesters(semData);
-      if (secData.length > 0) setSections(secData);
-      if (batchData.length > 0) setBatches(batchData);
-      if (courseData.length > 0) setCourses(courseData);
-      if (teacherData.length > 0) setTeachers(teacherData);
-      if (roomData.length > 0) setRooms(roomData);
-      if (lfData.length > 0) setLostFoundItems(lfData);
+      // Set state directly from Supabase responses without any local fallbacks
+      setDepartments(deptData);
+      setPrograms(progData);
+      setSemesters(semData);
+      setSections(secData);
+      setBatches(batchData);
+      setCourses(courseData);
+      setTeachers(teacherData);
+      setRooms(roomData);
+      setLostFoundItems(lfData);
 
       // 2. Fetch timetable entries from public.timetable_entries
-      // If student is logged in, pass specific section_id and academic IDs to guarantee section isolation
       let timetableResults: TimetableEntry[] = [];
       if (currentUser?.sectionId || currentUser?.section) {
         timetableResults = await fetchTimetableEntries({
@@ -201,21 +197,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
       }
 
-      // If no specific filtered query returned or for general directory, fetch all timetable entries
+      // If no student-specific filtered query returned or for general directory, fetch all timetable entries
       if (timetableResults.length === 0) {
         timetableResults = await fetchTimetableEntries();
       }
 
-      if (timetableResults.length > 0) {
-        setTimetable(timetableResults);
-      }
+      setTimetable(timetableResults);
+      setIsDbConnected(true);
     } catch (err: any) {
-      console.warn('Error loading Supabase tables:', err);
-      setDataError(err.message || 'Failed to sync with Supabase');
+      console.warn('Error connecting to Supabase:', err);
+      setIsDbConnected(false);
+      setDataError(err.message || 'Database connection failed. Unable to reach Supabase.');
+      // Ensure state remains empty on error
+      setDepartments([]);
+      setPrograms([]);
+      setSemesters([]);
+      setSections([]);
+      setBatches([]);
+      setCourses([]);
+      setTeachers([]);
+      setRooms([]);
+      setTimetable([]);
+      setLostFoundItems([]);
       addToast({
-        type: 'warning',
-        title: 'Supabase Sync Note',
-        message: 'Unable to reach some Supabase tables. Displaying loaded records.'
+        type: 'error',
+        title: 'Database Connection Error',
+        message: 'Unable to connect to Supabase. Displaying empty state.'
       });
     } finally {
       setIsLoadingData(false);
@@ -240,38 +247,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         message: `"${result.data.itemName}" has been saved in the Supabase campus registry.`
       });
     } else {
-      // Optimistic local fallback if offline
-      const fallback: LostFoundItem = {
-        ...itemData,
-        id: 'lf-' + Date.now(),
-        status: itemData.status || (itemData.type === 'lost' ? 'Lost' : 'Found'),
-        reportedAt: new Date().toISOString()
-      };
-      setLostFoundItems((prev) => [fallback, ...prev]);
       addToast({
-        type: result.error ? 'warning' : 'success',
-        title: 'Item Recorded',
-        message: result.error ? `Saved locally (${result.error})` : `"${fallback.itemName}" has been recorded.`
+        type: 'error',
+        title: 'Submission Failed',
+        message: result.error || 'Failed to save item to Supabase database.'
       });
     }
   };
 
   const claimItem = async (itemId: string, claimData: ClaimRecord) => {
     const result = await claimLostFoundItem(itemId, claimData);
-    setLostFoundItems((prev) =>
-      prev.map((item) => {
-        if (item.id === itemId) {
-          return {
-            ...item,
-            status: 'Claimed',
-            claimRecord: claimData
-          };
-        }
-        return item;
-      })
-    );
-
     if (result.success) {
+      setLostFoundItems((prev) =>
+        prev.map((item) => {
+          if (item.id === itemId) {
+            return {
+              ...item,
+              status: 'Claimed',
+              claimRecord: claimData
+            };
+          }
+          return item;
+        })
+      );
       addToast({
         type: 'success',
         title: 'Claim Submitted to Supabase',
@@ -279,28 +277,36 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       });
     } else {
       addToast({
-        type: 'info',
-        title: 'Claim Registered',
-        message: 'Your claim has been recorded for review.'
+        type: 'error',
+        title: 'Claim Failed',
+        message: result.error || 'Failed to record claim in Supabase database.'
       });
     }
   };
 
   const updateItemStatus = async (itemId: string, status: LostFoundItem['status']) => {
-    await updateLostFoundItemStatus(itemId, status);
-    setLostFoundItems((prev) =>
-      prev.map((item) => {
-        if (item.id === itemId) {
-          return { ...item, status };
-        }
-        return item;
-      })
-    );
-    addToast({
-      type: 'info',
-      title: 'Status Updated',
-      message: `Item status has been changed to "${status}".`
-    });
+    const result = await updateLostFoundItemStatus(itemId, status);
+    if (result.success) {
+      setLostFoundItems((prev) =>
+        prev.map((item) => {
+          if (item.id === itemId) {
+            return { ...item, status };
+          }
+          return item;
+        })
+      );
+      addToast({
+        type: 'info',
+        title: 'Status Updated',
+        message: `Item status has been changed to "${status}".`
+      });
+    } else {
+      addToast({
+        type: 'error',
+        title: 'Update Failed',
+        message: result.error || 'Failed to update item status in Supabase database.'
+      });
+    }
   };
 
   return (
@@ -320,6 +326,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         courses,
         isLoadingData,
         dataError,
+        isDbConnected,
         refreshData: loadSupabaseData,
         selectedRoom,
         setSelectedRoom,

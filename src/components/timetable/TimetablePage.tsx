@@ -19,7 +19,6 @@ import {
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
 import { DayOfWeek, TimetableEntry } from '../../types';
-import { DEPARTMENTS, DEGREES, SEMESTERS, SECTIONS, BATCHES } from '../../data/mockData';
 import { formatRoomDisplay } from '../../utils/roomUtils';
 import { getStudentEnrolledClasses, formatStudentAcademicContext } from '../../utils/studentScheduleUtils';
 import { formatUserRollNumber } from '../../utils/rollNumberUtils';
@@ -42,11 +41,11 @@ export const TimetablePage: React.FC = () => {
   } = useApp();
   const { currentUser, openAuthModal } = useAuth();
 
-  const departmentOptions = departments.length > 0 ? departments.map((d) => d.name) : DEPARTMENTS;
-  const degreeOptions = programs.length > 0 ? programs.map((p) => p.name) : DEGREES;
-  const semesterOptions = semesters.length > 0 ? semesters.map((s) => s.name) : SEMESTERS;
-  const sectionOptions = sections.length > 0 ? sections.map((s) => s.name) : SECTIONS;
-  const batchOptions = batches.length > 0 ? batches.map((b) => b.name) : BATCHES;
+  const departmentOptions = departments.map((d) => d.name);
+  const degreeOptions = programs.map((p) => p.name);
+  const semesterOptions = semesters.map((s) => s.name);
+  const sectionOptions = sections.map((s) => s.name);
+  const batchOptions = batches.map((b) => b.name);
 
   // Mode: 'enrolled' for student's auto-filtered classes, 'university' for campus-wide directory / admin
   const [viewMode, setViewMode] = useState<'enrolled' | 'university'>(currentUser ? 'enrolled' : 'university');

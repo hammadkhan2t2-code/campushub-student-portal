@@ -227,10 +227,10 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-lg font-bold text-white font-mono">
-                  {formatRoomDisplay(nextClass?.classroomNumber) || 'Room 1'}
+                  {nextClass?.classroomNumber ? formatRoomDisplay(nextClass.classroomNumber) : '—'}
                 </p>
                 <p className="text-xs text-slate-400 truncate mt-0.5">
-                  {nextClass?.building || 'Academic Complex'}
+                  {nextClass?.building || 'No room currently assigned'}
                 </p>
               </button>
 
@@ -254,10 +254,10 @@ export const DashboardView: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-lg font-bold text-white truncate">
-                  {nextClass?.teacherName || (teachers[0] ? teachers[0].name : 'Academic Faculty')}
+                  {nextClass?.teacherName || (nextTeacherObj ? nextTeacherObj.name : '—')}
                 </p>
                 <p className="text-xs text-slate-400 truncate mt-0.5">
-                  {nextTeacherObj?.designation ? `${nextTeacherObj.designation} • ${nextTeacherObj.department}` : (nextClass?.department || 'Department Faculty')}
+                  {nextTeacherObj?.designation ? `${nextTeacherObj.designation} • ${nextTeacherObj.department}` : (nextClass?.department || 'No active faculty assignment')}
                 </p>
               </button>
             </div>

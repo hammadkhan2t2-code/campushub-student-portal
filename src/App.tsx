@@ -16,6 +16,7 @@ import { RoomsPage } from './components/rooms/RoomsPage';
 import { TeachersPage } from './components/teachers/TeachersPage';
 import { LostFoundPage } from './components/lostfound/LostFoundPage';
 import { StudentProfilePage } from './components/profile/StudentProfilePage';
+import { DatabaseErrorBanner } from './components/common/DatabaseErrorBanner';
 import {
   GraduationCap,
   Sparkles,
@@ -36,6 +37,7 @@ const MainLayout: React.FC = () => {
 
       {/* Main Page Body */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <DatabaseErrorBanner />
         {activeTab === 'home' && <DashboardView />}
         {activeTab === 'timetable' && <TimetablePage />}
         {activeTab === 'rooms' && <RoomsPage />}

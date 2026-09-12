@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { TeacherDetailModal } from './TeacherDetailModal';
-import { DEPARTMENTS } from '../../data/mockData';
 import {
   UNIVERSITY_OPERATING_HOURS,
   getTeacherClasses,
@@ -19,7 +18,7 @@ import {
 } from '../../utils/teacherUtils';
 
 export const TeachersPage: React.FC = () => {
-  const { teachers, timetable, selectedTeacher, setSelectedTeacher } = useApp();
+  const { teachers, timetable, selectedTeacher, setSelectedTeacher, departments } = useApp();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDept, setSelectedDept] = useState('All');
@@ -92,9 +91,9 @@ export const TeachersPage: React.FC = () => {
               className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none truncate"
             >
               <option value="All">All Faculty Departments</option>
-              {DEPARTMENTS.map((d) => (
-                <option key={d} value={d}>
-                  {d}
+              {departments.map((d) => (
+                <option key={d.id} value={d.name}>
+                  {d.name}
                 </option>
               ))}
             </select>
