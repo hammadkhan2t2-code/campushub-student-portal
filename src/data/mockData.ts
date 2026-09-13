@@ -32,7 +32,7 @@ import { Teacher, Room, TimetableEntry, LostFoundItem, DayOfWeek } from '../type
  * - 16 rooms
  * - 34 course codes
  * - 157 timetable entries
- * - Authentic INITIAL_LOST_FOUND items
+ * - Empty INITIAL_LOST_FOUND dataset (starts with zero items; user-submitted items only)
  * ============================================================================
  */
 
@@ -168,94 +168,5 @@ export const COURSES: CourseRecord[] = Array.from(
   }, new Map<string, CourseRecord>()).values()
 );
 
-// 9. INITIAL_LOST_FOUND
-export const INITIAL_LOST_FOUND: LostFoundItem[] = [
-  {
-    id: 'lf-casio-1',
-    type: 'lost',
-    itemName: 'Casio fx-991EX Scientific Calculator',
-    category: 'Electronics',
-    description: 'Casio fx-991EX ClassWiz calculator in black casing left on the second row desk in Lab 3.',
-    location: 'CS Computing Laboratories, Lab 3',
-    room: 'Lab 3',
-    date: '2026-09-10',
-    approximateTime: '10:30 AM',
-    contactMethod: 'Contact Your CR',
-    status: 'Lost',
-    reportedBy: 'Hamza Khan',
-    reportedByEmail: 'student@campushub.edu.pk',
-    reportedAt: '2026-09-10T10:35:00.000Z'
-  },
-  {
-    id: 'lf-wallet-2',
-    type: 'found',
-    itemName: 'Leather Wallet with University ID Card',
-    category: 'Keys & Wallets',
-    description: 'Brown leather wallet containing university student card and library card deposited with CR.',
-    location: 'CS Academic Block, Room 3',
-    room: 'Room 3',
-    date: '2026-09-11',
-    approximateTime: '12:15 PM',
-    contactMethod: 'Contact Your CR',
-    status: 'Found',
-    reportedBy: 'Muhammad Bilal',
-    reportedByEmail: 'student@campushub.edu.pk',
-    reportedAt: '2026-09-11T12:20:00.000Z'
-  },
-  {
-    id: 'lf-usb-3',
-    type: 'found',
-    itemName: 'HP 64GB USB 3.0 Flash Drive',
-    category: 'Electronics',
-    description: 'Silver metal HP USB flash drive found plugged into workstation #14 in Lab 1.',
-    location: 'CS Computing Laboratories, Lab 1',
-    room: 'Lab 1',
-    date: '2026-09-12',
-    approximateTime: '02:00 PM',
-    contactMethod: 'Contact Your CR',
-    status: 'Found',
-    reportedBy: 'Zainab Bibi',
-    reportedByEmail: 'student@campushub.edu.pk',
-    reportedAt: '2026-09-12T14:05:00.000Z'
-  },
-  {
-    id: 'lf-textbook-4',
-    type: 'lost',
-    itemName: 'Data Structures & Algorithms Textbook',
-    category: 'Books & Stationery',
-    description: 'Hardcover textbook with handwritten lecture notes and green bookmark in Room 5.',
-    location: 'CS Academic Block, Room 5',
-    room: 'Room 5',
-    date: '2026-09-12',
-    approximateTime: '11:45 AM',
-    contactMethod: 'Contact Your CR',
-    status: 'Lost',
-    reportedBy: 'Usman Ali',
-    reportedByEmail: 'student@campushub.edu.pk',
-    reportedAt: '2026-09-12T11:50:00.000Z'
-  },
-  {
-    id: 'lf-card-5',
-    type: 'found',
-    itemName: 'Campus Student ID Card (BSCS)',
-    category: 'IDs & Cards',
-    description: 'Official university student smart card handed back to owner upon verification.',
-    location: 'CS Academic Block, Room 1',
-    room: 'Room 1',
-    date: '2026-09-08',
-    approximateTime: '09:00 AM',
-    contactMethod: 'Contact Your CR',
-    status: 'Claimed',
-    reportedBy: 'Class Representative',
-    reportedByEmail: 'student@campushub.edu.pk',
-    reportedAt: '2026-09-08T09:15:00.000Z',
-    claimRecord: {
-      claimedBy: 'Ahmad Shah',
-      claimedByRoll: '25-CS-18',
-      claimedByEmail: 'student@campushub.edu.pk',
-      claimNote: 'Verified identity and roll number with student card copy.',
-      contact: 'Contact Your CR',
-      claimedAt: '2026-09-09T10:00:00.000Z'
-    }
-  }
-];
+// 9. INITIAL_LOST_FOUND (Empty dataset; starts with zero items)
+export const INITIAL_LOST_FOUND: LostFoundItem[] = [];

@@ -191,7 +191,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (courseData && courseData.length > 0) setCourses(courseData);
       if (teacherData && teacherData.length > 0) setTeachers(teacherData);
       if (roomData && roomData.length > 0) setRooms(roomData);
-      if (lfData && lfData.length > 0) setLostFoundItems(lfData);
+      if (lfData) setLostFoundItems(lfData);
 
       // 2. Fetch timetable entries from public.timetable_entries
       let timetableResults: TimetableEntry[] = [];
