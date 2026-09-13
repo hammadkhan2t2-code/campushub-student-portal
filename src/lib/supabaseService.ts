@@ -25,6 +25,9 @@ export function isSupabaseConfigured(): boolean {
 // ACADEMIC METADATA
 // ----------------------------------------------------
 
+const CANONICAL_DEPARTMENTS = ['Computer Science', 'Software Engineering', 'Artificial Intelligence'];
+const CANONICAL_PROGRAMS = ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence'];
+
 export async function fetchDepartments(): Promise<DepartmentRecord[]> {
   try {
     const { data, error } = await supabase
@@ -35,7 +38,11 @@ export async function fetchDepartments(): Promise<DepartmentRecord[]> {
       console.warn('Supabase fetchDepartments error:', error.message);
       return [];
     }
-    return data || [];
+    // Filter strictly to the 3 original departments
+    const filtered = (data || []).filter((d: DepartmentRecord) =>
+      CANONICAL_DEPARTMENTS.includes(d.name)
+    );
+    return filtered;
   } catch (err) {
     console.warn('Failed to fetch departments from Supabase:', err);
     return [];
@@ -52,7 +59,11 @@ export async function fetchPrograms(): Promise<ProgramRecord[]> {
       console.warn('Supabase fetchPrograms error:', error.message);
       return [];
     }
-    return data || [];
+    // Filter strictly to the 3 original programs
+    const filtered = (data || []).filter((p: ProgramRecord) =>
+      CANONICAL_PROGRAMS.includes(p.name)
+    );
+    return filtered;
   } catch (err) {
     console.warn('Failed to fetch programs from Supabase:', err);
     return [];
@@ -156,10 +167,15 @@ export async function fetchTeachers(): Promise<Teacher[]> {
     if (!data) return [];
 
     return data.map((t: any) => {
-      const deptName =
+      let deptName =
         t.department_name ||
         t.departments?.name ||
         'Computer Science';
+
+      // Correct any teacher department mapping that was artificially changed to Mathematics, Physics, or Humanities
+      if (['Mathematics', 'Physics', 'Humanities'].includes(deptName)) {
+        deptName = 'Computer Science';
+      }
 
       return {
         id: t.id,
@@ -167,8 +183,8 @@ export async function fetchTeachers(): Promise<Teacher[]> {
         designation: t.designation || 'Faculty Member',
         department: deptName,
         email: t.email,
-        office: t.office,
-        officeHours: t.office_hours,
+        office: t.office || 'Faculty Block A, CS Dept',
+        officeHours: t.office_hours || 'Mon–Thu: 10:00 AM – 12:00 PM | Fri: 09:00 AM – 11:00 AM',
         courses: [],
         qualifications: t.qualifications || 'Faculty Member, University of Peshawar',
         specialization: t.specialization || 'Computing and Information Sciences'
@@ -456,7 +472,10 @@ export async function updateSupabaseProfile(
 export function mapProfileRecordToUser(p: any): User {
   const firstName = p.first_name || (p.full_name ? p.full_name.split(' ')[0] : 'Student');
   const lastName = p.last_name || (p.full_name ? p.full_name.split(' ').slice(1).join(' ') : '');
-  const departmentName = p.departments?.name || p.department || 'Computer Science';
+  let departmentName = p.departments?.name || p.department || 'Computer Science';
+  if (['Mathematics', 'Physics', 'Humanities'].includes(departmentName)) {
+    departmentName = 'Computer Science';
+  }
   const degreeName = p.programs?.name || p.degree || p.program || 'BS Computer Science';
   const semesterName = p.semesters?.name || p.semester || '1st';
   const sectionName = p.sections?.name || p.section || 'A';

@@ -177,7 +177,7 @@ export const ORIGINAL_TEACHERS: RawTeacher[] = [
     id: 'tch-math',
     name: 'Faculty (Mathematics Dept)',
     designation: 'Department of Mathematics',
-    department: 'Mathematics',
+    department: 'Computer Science',
     courses: ['Basic Math - I', 'Calculus & Analytical Geometry', 'Linear Algebra', 'Multivariate Calculus'],
     qualifications: 'M.Phil / Ph.D. in Mathematics',
     specialization: 'Applied Calculus, Analytical Geometry, Differential Equations, Linear Algebra'
@@ -186,7 +186,7 @@ export const ORIGINAL_TEACHERS: RawTeacher[] = [
     id: 'tch-english',
     name: 'Faculty (English Dept)',
     designation: 'Department of English',
-    department: 'Humanities',
+    department: 'Computer Science',
     courses: ['Functional English'],
     qualifications: 'M.Phil in Applied Linguistics',
     specialization: 'Technical Writing, Academic English Communication'
@@ -195,7 +195,7 @@ export const ORIGINAL_TEACHERS: RawTeacher[] = [
     id: 'tch-physics',
     name: 'Faculty (Physics Dept)',
     designation: 'Department of Physics',
-    department: 'Physics',
+    department: 'Computer Science',
     courses: ['Physics'],
     qualifications: 'M.Phil / Ph.D. in Applied Physics',
     specialization: 'Applied Physics, Semiconductor Physics'
@@ -204,7 +204,7 @@ export const ORIGINAL_TEACHERS: RawTeacher[] = [
     id: 'tch-islamic',
     name: 'Faculty (Islamic & Pak Studies)',
     designation: 'Humanities Department',
-    department: 'Humanities',
+    department: 'Computer Science',
     courses: ['Islamic Studies', 'Pakistan Studies', 'Holy Quran'],
     qualifications: 'M.Phil in Islamic & Pakistan Studies',
     specialization: 'Islamic Jurisprudence, Constitutional History of Pakistan'

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '../types';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import {
   fetchProfileById,
   mapProfileRecordToUser,
@@ -196,6 +196,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) {
         setIsSubmitting(false);
+        const errMsg = error.message || '';
+        if (errMsg.toLowerCase().includes('failed to fetch')) {
+          return {
+            success: false,
+            error: 'Connection to Supabase authentication service failed (Failed to fetch). Please ensure your Supabase instance is active and accessible.'
+          };
+        }
         return { success: false, error: error.message };
       }
 
@@ -210,6 +217,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: false, error: 'Authentication failed. Please try again.' };
     } catch (err: any) {
       setIsSubmitting(false);
+      const msg = err?.message || '';
+      if (msg.toLowerCase().includes('failed to fetch')) {
+        return {
+          success: false,
+          error: 'Connection to Supabase authentication service failed (Failed to fetch). Please check network connectivity and Supabase project status.'
+        };
+      }
       return { success: false, error: err.message || 'An unexpected error occurred during sign in.' };
     }
   };
@@ -234,6 +248,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     if (!data.department || !data.degree || !data.semester || !data.section) {
       return { success: false, error: 'Please fill in all academic department, program, semester, and section fields.' };
+    }
+
+    if (!isSupabaseConfigured) {
+      return {
+        success: false,
+        error: 'Supabase authentication service is not configured. Please set valid VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.'
+      };
     }
 
     setIsSubmitting(true);
@@ -309,6 +330,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (signUpError) {
         setIsSubmitting(false);
+        const errMsg = signUpError.message || '';
+        if (errMsg.toLowerCase().includes('failed to fetch')) {
+          return {
+            success: false,
+            error: 'Connection to Supabase authentication service failed (Failed to fetch). Please ensure your Supabase instance is active and accessible.'
+          };
+        }
         return { success: false, error: signUpError.message };
       }
 
@@ -352,6 +380,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: false, error: 'Registration incomplete. Please check your inputs.' };
     } catch (err: any) {
       setIsSubmitting(false);
+      const msg = err?.message || '';
+      if (msg.toLowerCase().includes('failed to fetch')) {
+        return {
+          success: false,
+          error: 'Connection to Supabase authentication service failed (Failed to fetch). Please check network connectivity and Supabase project status.'
+        };
+      }
       return { success: false, error: err.message || 'Failed to create student account.' };
     }
   };

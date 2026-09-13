@@ -1,24 +1,29 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const rawUrl = import.meta.env.VITE_SUPABASE_URL;
+const rawAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Clean and validate Supabase configuration values (stripping whitespace and accidental trailing slashes)
+const cleanUrl = typeof rawUrl === 'string' ? rawUrl.trim().replace(/\/+$/, '') : '';
+const cleanAnonKey = typeof rawAnonKey === 'string' ? rawAnonKey.trim() : '';
 
 export const isSupabaseConfigured = Boolean(
-  supabaseUrl &&
-  supabaseAnonKey &&
-  supabaseUrl !== 'https://your-project.supabase.co' &&
-  supabaseAnonKey !== 'your-anon-key'
+  cleanUrl &&
+  cleanAnonKey &&
+  cleanUrl.startsWith('http') &&
+  cleanUrl !== 'https://your-project.supabase.co' &&
+  cleanAnonKey !== 'your-anon-key'
 );
 
 if (!isSupabaseConfigured) {
   console.warn(
-    'Supabase environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY) are not set. CampusHub requires Supabase as single source of truth; displaying database connection error / empty state.'
+    'Supabase environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY) are not set or are using defaults. CampusHub requires Supabase as single source of truth for authentication and database.'
   );
 }
 
-// Fallback dummy credentials to allow safe client creation without throwing top-level crash
-const activeUrl = isSupabaseConfigured && supabaseUrl ? supabaseUrl : 'https://placeholder.supabase.co';
-const activeKey = isSupabaseConfigured && supabaseAnonKey ? supabaseAnonKey : 'placeholder-anon-key';
+// Active configuration endpoint
+const activeUrl = isSupabaseConfigured ? cleanUrl : 'https://placeholder.supabase.co';
+const activeKey = isSupabaseConfigured ? cleanAnonKey : 'placeholder-anon-key';
 
 export const supabase: SupabaseClient = createClient(
   activeUrl,
@@ -31,4 +36,6 @@ export const supabase: SupabaseClient = createClient(
     }
   }
 );
+
+
 

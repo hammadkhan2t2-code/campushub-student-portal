@@ -22,8 +22,7 @@ import { Teacher, Room, TimetableEntry, LostFoundItem, DayOfWeek } from '../type
  *
  * Source: Authentic Islamia College / University Dataset
  * Exact Counts:
- * - 3 degree-offering departments
- * - 3 allied departments (Total: 6 departments)
+ * - 3 departments (Computer Science, Software Engineering, Artificial Intelligence)
  * - 3 programs (BS Computer Science, BS Software Engineering, BS Artificial Intelligence)
  * - 4 semesters (1st, 3rd, 5th, 7th)
  * - 2 sections (A, B)
@@ -36,14 +35,11 @@ import { Teacher, Room, TimetableEntry, LostFoundItem, DayOfWeek } from '../type
  * ============================================================================
  */
 
-// 1. DEPARTMENTS (3 degree-offering + 3 allied = 6 departments)
-export const DEPARTMENTS: (DepartmentRecord & { code: string; type: 'degree-offering' | 'allied' })[] = [
-  { id: 'dept-cs', name: 'Computer Science', code: 'CS', type: 'degree-offering' },
-  { id: 'dept-se', name: 'Software Engineering', code: 'SE', type: 'degree-offering' },
-  { id: 'dept-ai', name: 'Artificial Intelligence', code: 'AI', type: 'degree-offering' },
-  { id: 'dept-math', name: 'Mathematics', code: 'MATH', type: 'allied' },
-  { id: 'dept-phys', name: 'Physics', code: 'PHYS', type: 'allied' },
-  { id: 'dept-hum', name: 'Humanities', code: 'HUM', type: 'allied' }
+// 1. DEPARTMENTS (Exactly 3 departments)
+export const DEPARTMENTS: (DepartmentRecord & { code: string })[] = [
+  { id: 'dept-cs', name: 'Computer Science', code: 'CS' },
+  { id: 'dept-se', name: 'Software Engineering', code: 'SE' },
+  { id: 'dept-ai', name: 'Artificial Intelligence', code: 'AI' }
 ];
 
 // 2. DEGREES / PROGRAMS (3 programs)
@@ -106,7 +102,7 @@ export const TEACHERS: Teacher[] = ORIGINAL_TEACHERS.map((t: RawTeacher): Teache
   qualifications: t.qualifications,
   specialization: t.specialization,
   email: `${t.name.toLowerCase().replace(/[^a-z0-9]/g, '.').replace(/\.+/g, '.')}@campushub.edu.pk`,
-  office: t.department === 'Computer Science' ? 'Faculty Block A, CS Dept' : 'Allied Sciences Faculty Block',
+  office: 'Faculty Block A, CS Dept',
   officeHours: 'Mon–Thu: 10:00 AM – 12:00 PM | Fri: 09:00 AM – 11:00 AM'
 }));
 
