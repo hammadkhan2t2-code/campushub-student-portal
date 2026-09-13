@@ -1,7 +1,15 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const rawUrl = import.meta.env.VITE_SUPABASE_URL;
-const rawAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Resolves Supabase credentials from Vite import.meta.env with server and build-time fallbacks
+const rawUrl: string =
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_URL) ||
+  (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_URL) ||
+  'https://gfvadvqmsfmhlhwkgden.supabase.co';
+
+const rawAnonKey: string =
+  (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_SUPABASE_ANON_KEY) ||
+  (typeof process !== 'undefined' && process.env?.VITE_SUPABASE_ANON_KEY) ||
+  'sb_publishable_K7ptyYnUXqqwARCzgXhOwQ_sKzkVORm';
 
 // Clean and validate Supabase configuration values (stripping whitespace and accidental trailing slashes)
 const cleanUrl = typeof rawUrl === 'string' ? rawUrl.trim().replace(/\/+$/, '') : '';
@@ -22,20 +30,17 @@ if (!isSupabaseConfigured) {
 }
 
 // Active configuration endpoint
-const activeUrl = isSupabaseConfigured ? cleanUrl : 'https://placeholder.supabase.co';
-const activeKey = isSupabaseConfigured ? cleanAnonKey : 'placeholder-anon-key';
+const activeUrl = isSupabaseConfigured ? cleanUrl : 'https://gfvadvqmsfmhlhwkgden.supabase.co';
+const activeKey = isSupabaseConfigured ? cleanAnonKey : 'sb_publishable_K7ptyYnUXqqwARCzgXhOwQ_sKzkVORm';
 
 export const supabase: SupabaseClient = createClient(
   activeUrl,
   activeKey,
   {
     auth: {
-      persistSession: isSupabaseConfigured,
-      autoRefreshToken: isSupabaseConfigured,
-      detectSessionInUrl: isSupabaseConfigured
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
     }
   }
 );
-
-
-
