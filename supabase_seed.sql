@@ -14,15 +14,6 @@ ON CONFLICT (name) DO UPDATE SET code = EXCLUDED.code;
 INSERT INTO public.departments (id, name, code)
 VALUES (gen_random_uuid(), 'Artificial Intelligence', 'AI')
 ON CONFLICT (name) DO UPDATE SET code = EXCLUDED.code;
-INSERT INTO public.departments (id, name, code)
-VALUES (gen_random_uuid(), 'Mathematics', 'MATH')
-ON CONFLICT (name) DO UPDATE SET code = EXCLUDED.code;
-INSERT INTO public.departments (id, name, code)
-VALUES (gen_random_uuid(), 'Physics', 'PHYS')
-ON CONFLICT (name) DO UPDATE SET code = EXCLUDED.code;
-INSERT INTO public.departments (id, name, code)
-VALUES (gen_random_uuid(), 'Humanities', 'HUM')
-ON CONFLICT (name) DO UPDATE SET code = EXCLUDED.code;
 
 -- 2. PROGRAMS / DEGREES
 INSERT INTO public.programs (id, department_id, name, short_code, duration_years)
@@ -321,7 +312,7 @@ ON CONFLICT (name) DO UPDATE SET
 INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
 SELECT gen_random_uuid(), 'Faculty (Mathematics Dept)', 'Department of Mathematics', 'M.Phil / Ph.D. in Mathematics', 'Applied Calculus, Analytical Geometry, Differential Equations, Linear Algebra', d.id
 FROM public.departments d
-WHERE d.name = 'Mathematics'
+WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (name) DO UPDATE SET
   designation = EXCLUDED.designation,
@@ -331,7 +322,7 @@ ON CONFLICT (name) DO UPDATE SET
 INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
 SELECT gen_random_uuid(), 'Faculty (English Dept)', 'Department of English', 'M.Phil in Applied Linguistics', 'Technical Writing, Academic English Communication', d.id
 FROM public.departments d
-WHERE d.name = 'Humanities'
+WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (name) DO UPDATE SET
   designation = EXCLUDED.designation,
@@ -341,7 +332,7 @@ ON CONFLICT (name) DO UPDATE SET
 INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
 SELECT gen_random_uuid(), 'Faculty (Physics Dept)', 'Department of Physics', 'M.Phil / Ph.D. in Applied Physics', 'Applied Physics, Semiconductor Physics', d.id
 FROM public.departments d
-WHERE d.name = 'Physics'
+WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (name) DO UPDATE SET
   designation = EXCLUDED.designation,
@@ -351,7 +342,7 @@ ON CONFLICT (name) DO UPDATE SET
 INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
 SELECT gen_random_uuid(), 'Faculty (Islamic & Pak Studies)', 'Humanities Department', 'M.Phil in Islamic & Pakistan Studies', 'Islamic Jurisprudence, Constitutional History of Pakistan', d.id
 FROM public.departments d
-WHERE d.name = 'Humanities'
+WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (name) DO UPDATE SET
   designation = EXCLUDED.designation,
