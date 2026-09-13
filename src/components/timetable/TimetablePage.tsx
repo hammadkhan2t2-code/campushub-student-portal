@@ -85,6 +85,20 @@ export const TimetablePage: React.FC = () => {
     // In university mode, apply manual admin filters
     if (viewMode === 'university') {
       if (deptFilter !== 'All' && entry.department !== deptFilter) return false;
+      if (programFilter !== 'All') {
+        const pNorm = programFilter.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const entryDegNorm = (entry.degree || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const entryProgNorm = (entry.program || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const entryDeptNorm = (entry.department || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (
+          !entryDegNorm.includes(pNorm) &&
+          !pNorm.includes(entryDegNorm) &&
+          !entryProgNorm.includes(pNorm) &&
+          !pNorm.includes(entryDeptNorm)
+        ) {
+          return false;
+        }
+      }
       if (semFilter !== 'All' && entry.semester !== semFilter) return false;
       if (secFilter !== 'All' && entry.section !== secFilter) return false;
       if (batchFilter !== 'All' && entry.batch !== batchFilter) return false;

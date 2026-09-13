@@ -9,6 +9,8 @@ export interface ProgramRecord {
   id: string;
   department_id?: string;
   name: string;
+  short_code?: string;
+  duration_years?: number;
   code?: string;
   degree_type?: string;
   created_at?: string;

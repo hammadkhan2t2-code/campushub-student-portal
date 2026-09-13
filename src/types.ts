@@ -38,6 +38,8 @@ export interface TimetableEntry {
   startTime: string;
   endTime: string;
   department: string;
+  degree?: string;
+  program?: string;
   semester: string;
   section: string;
   batch: string;
