@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   X,
   Lock,
@@ -35,7 +35,6 @@ export const AuthModal: React.FC = () => {
 
   // Dynamic dropdown lists loaded exclusively from Supabase tables
   const departmentOptions = departments.map((d) => d.name);
-  const degreeOptions = programs.map((p) => p.name);
   const semesterOptions = semesters.map((s) => s.name);
   const sectionOptions = sections.map((s) => s.name);
   const batchOptions = batches.map((b) => b.name);
@@ -66,6 +65,115 @@ export const AuthModal: React.FC = () => {
   });
   const [regStep, setRegStep] = useState<1 | 2>(1);
   const [regError, setRegError] = useState('');
+
+  // Find currently selected department record and its department_id from Supabase departments table
+  const selectedDepartmentRecord = useMemo(() => {
+    return departments.find(
+      (d) => d.name.toLowerCase() === regData.department.toLowerCase() || d.id === regData.department
+    );
+  }, [departments, regData.department]);
+
+  const selectedDepartmentId = selectedDepartmentRecord?.id;
+
+  // Filter programs from Supabase programs table using the selected department's department_id
+  const filteredProgramsForDept = useMemo(() => {
+    const matched = programs.filter((p) => {
+      if (selectedDepartmentId && p.department_id) {
+        return p.department_id === selectedDepartmentId;
+      }
+      const progDept = (p as any).department;
+      if (progDept && selectedDepartmentRecord) {
+        return progDept.toLowerCase() === selectedDepartmentRecord.name.toLowerCase();
+      }
+      if (regData.department === 'Computer Science') return p.name === 'BS Computer Science';
+      if (regData.department === 'Software Engineering') return p.name === 'BS Software Engineering';
+      if (regData.department === 'Artificial Intelligence') return p.name === 'BS Artificial Intelligence';
+      return false;
+    });
+
+    if (matched.length > 0) return matched;
+
+    // Guaranteed canonical fallback mapping
+    const fallbackName =
+      regData.department === 'Software Engineering'
+        ? 'BS Software Engineering'
+        : regData.department === 'Artificial Intelligence'
+        ? 'BS Artificial Intelligence'
+        : 'BS Computer Science';
+
+    return [{ id: `prog-${regData.department}`, name: fallbackName, department_id: selectedDepartmentId }];
+  }, [programs, selectedDepartmentId, selectedDepartmentRecord, regData.department]);
+
+  const degreeOptions = useMemo(() => {
+    return filteredProgramsForDept.map((p) => p.name);
+  }, [filteredProgramsForDept]);
+
+  // All canonical programs list for initial step selection
+  const allProgramOptions = useMemo(() => {
+    const names = programs.map((p) => p.name);
+    return names.length > 0 ? names : ['BS Computer Science', 'BS Software Engineering', 'BS Artificial Intelligence'];
+  }, [programs]);
+
+  const handleDepartmentChange = (newDept: string) => {
+    // Lookup department record
+    const deptMatch = departments.find(
+      (d) => d.name.toLowerCase() === newDept.toLowerCase() || d.id === newDept
+    );
+    const deptId = deptMatch?.id;
+
+    // Find program filtered by selected department's department_id
+    const matchingPrograms = programs.filter((p) => {
+      if (deptId && p.department_id) {
+        return p.department_id === deptId;
+      }
+      const progDept = (p as any).department;
+      if (progDept && deptMatch) {
+        return progDept.toLowerCase() === deptMatch.name.toLowerCase();
+      }
+      if (newDept === 'Computer Science') return p.name === 'BS Computer Science';
+      if (newDept === 'Software Engineering') return p.name === 'BS Software Engineering';
+      if (newDept === 'Artificial Intelligence') return p.name === 'BS Artificial Intelligence';
+      return false;
+    });
+
+    const nextDegree = matchingPrograms.length > 0
+      ? matchingPrograms[0].name
+      : newDept === 'Software Engineering'
+      ? 'BS Software Engineering'
+      : newDept === 'Artificial Intelligence'
+      ? 'BS Artificial Intelligence'
+      : 'BS Computer Science';
+
+    setRegData((prev) => ({
+      ...prev,
+      department: newDept,
+      degree: nextDegree,
+      rollNumber: formatRollNumber(prev.rollNumber, nextDegree)
+    }));
+  };
+
+  const handleDegreeChange = (newDeg: string) => {
+    // Find the program record from Supabase programs
+    const progMatch = programs.find((p) => p.name.toLowerCase() === newDeg.toLowerCase());
+    let associatedDept = regData.department;
+    if (progMatch?.department_id) {
+      const dMatch = departments.find((d) => d.id === progMatch.department_id);
+      if (dMatch) associatedDept = dMatch.name;
+    } else {
+      associatedDept = newDeg.includes('Software')
+        ? 'Software Engineering'
+        : newDeg.includes('Artificial')
+        ? 'Artificial Intelligence'
+        : 'Computer Science';
+    }
+
+    setRegData((prev) => ({
+      ...prev,
+      degree: newDeg,
+      department: associatedDept,
+      rollNumber: formatRollNumber(prev.rollNumber, newDeg)
+    }));
+  };
 
   // Reset Password State
   const [resetIdentifier, setResetIdentifier] = useState('');
@@ -340,23 +448,10 @@ export const AuthModal: React.FC = () => {
                       </label>
                       <select
                         value={regData.degree}
-                        onChange={(e) => {
-                          const newDeg = e.target.value;
-                          const dept = newDeg.includes('Software')
-                            ? 'Software Engineering'
-                            : newDeg.includes('Artificial')
-                            ? 'Artificial Intelligence'
-                            : 'Computer Science';
-                          setRegData({
-                            ...regData,
-                            degree: newDeg,
-                            department: dept,
-                            rollNumber: formatRollNumber(regData.rollNumber, newDeg)
-                          });
-                        }}
+                        onChange={(e) => handleDegreeChange(e.target.value)}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none font-medium h-[42px]"
                       >
-                        {degreeOptions.map((deg) => (
+                        {allProgramOptions.map((deg) => (
                           <option key={deg} value={deg}>
                             {deg}
                           </option>
@@ -456,7 +551,7 @@ export const AuthModal: React.FC = () => {
                       </label>
                       <select
                         value={regData.department}
-                        onChange={(e) => setRegData({ ...regData, department: e.target.value })}
+                        onChange={(e) => handleDepartmentChange(e.target.value)}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                       >
                         {departmentOptions.map((dept) => (
@@ -473,7 +568,7 @@ export const AuthModal: React.FC = () => {
                       </label>
                       <select
                         value={regData.degree}
-                        onChange={(e) => setRegData({ ...regData, degree: e.target.value })}
+                        onChange={(e) => handleDegreeChange(e.target.value)}
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                       >
                         {degreeOptions.map((deg) => (

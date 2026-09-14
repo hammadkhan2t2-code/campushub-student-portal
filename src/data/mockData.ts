@@ -27,10 +27,10 @@ import { Teacher, Room, TimetableEntry, LostFoundItem, DayOfWeek } from '../type
  * - 4 semesters (1st, 3rd, 5th, 7th)
  * - 2 sections (A, B)
  * - 4 batches (Fall 2026 – 2030, Fall 2025 – 2029, Fall 2024 – 2028, Fall 2023 – 2027)
- * - 15 teachers
+ * - 20 teachers
  * - 16 rooms
- * - 34 course codes
- * - 157 timetable entries
+ * - 45 course codes
+ * - 370 timetable entries
  * - Empty INITIAL_LOST_FOUND dataset (starts with zero items; user-submitted items only)
  * ============================================================================
  */
@@ -46,6 +46,7 @@ export const DEPARTMENTS: (DepartmentRecord & { code: string })[] = [
 export const DEGREES: (ProgramRecord & { department: string; code: string })[] = [
   {
     id: 'deg-bscs',
+    department_id: 'dept-cs',
     name: 'BS Computer Science',
     department: 'Computer Science',
     code: 'BSCS',
@@ -54,6 +55,7 @@ export const DEGREES: (ProgramRecord & { department: string; code: string })[] =
   },
   {
     id: 'deg-bsse',
+    department_id: 'dept-se',
     name: 'BS Software Engineering',
     department: 'Software Engineering',
     code: 'BSSE',
@@ -62,6 +64,7 @@ export const DEGREES: (ProgramRecord & { department: string; code: string })[] =
   },
   {
     id: 'deg-bsai',
+    department_id: 'dept-ai',
     name: 'BS Artificial Intelligence',
     department: 'Artificial Intelligence',
     code: 'BSAI',
@@ -125,7 +128,7 @@ function getDegreeForDepartment(dept: string): string {
   return 'BS ' + dept;
 }
 
-// 8. TIMETABLE_ENTRIES (157 entries)
+// 8. TIMETABLE_ENTRIES (370 authoritative entries from 20-page departmental schedule)
 export const TIMETABLE_ENTRIES: TimetableEntry[] = ORIGINAL_TIMETABLE_ENTRIES.map(
   (entry: RawTimetableEntry): TimetableEntry => ({
     id: entry.id,
@@ -139,7 +142,8 @@ export const TIMETABLE_ENTRIES: TimetableEntry[] = ORIGINAL_TIMETABLE_ENTRIES.ma
     startTime: entry.startTime,
     endTime: entry.endTime,
     department: entry.department,
-    degree: getDegreeForDepartment(entry.department),
+    degree: entry.degree || getDegreeForDepartment(entry.department),
+    program: entry.program || entry.degree || getDegreeForDepartment(entry.department),
     semester: entry.semester,
     section: entry.section,
     batch: entry.batch,
@@ -148,13 +152,14 @@ export const TIMETABLE_ENTRIES: TimetableEntry[] = ORIGINAL_TIMETABLE_ENTRIES.ma
   })
 );
 
-// Derived 34 unique courses
+// Derived unique courses
 export const COURSES: CourseRecord[] = Array.from(
   ORIGINAL_TIMETABLE_ENTRIES.reduce((map, entry) => {
     if (!map.has(entry.courseCode)) {
+      const cleanCourseName = entry.courseName.replace(/\s*\([Gg][12]\)/, '').trim();
       map.set(entry.courseCode, {
         id: `crs-${entry.courseCode.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
-        name: entry.courseName,
+        name: cleanCourseName,
         code: entry.courseCode,
         credit_hours: entry.creditHours,
         type: entry.type

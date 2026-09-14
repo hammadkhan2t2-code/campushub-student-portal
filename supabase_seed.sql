@@ -340,6 +340,56 @@ ON CONFLICT (name) DO UPDATE SET
   specialization = EXCLUDED.specialization,
   department_id = EXCLUDED.department_id;
 INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
+SELECT gen_random_uuid(), 'Dr. Shaukat Ali', 'Associate Professor', 'Ph.D. in Computer Science', 'Database Systems, Automata & Formal Languages, Distributed Systems', d.id
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (name) DO UPDATE SET
+  designation = EXCLUDED.designation,
+  qualifications = EXCLUDED.qualifications,
+  specialization = EXCLUDED.specialization,
+  department_id = EXCLUDED.department_id;
+INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
+SELECT gen_random_uuid(), 'Dr. Irshad', 'Assistant Professor', 'Ph.D. in Computer Science', 'Algorithms, Data Structures, Computer Graphics', d.id
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (name) DO UPDATE SET
+  designation = EXCLUDED.designation,
+  qualifications = EXCLUDED.qualifications,
+  specialization = EXCLUDED.specialization,
+  department_id = EXCLUDED.department_id;
+INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
+SELECT gen_random_uuid(), 'Dr. Bilal', 'Assistant Professor', 'Ph.D. in Computer Science', 'Database Engineering, Data Structures, Theory of Computation', d.id
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (name) DO UPDATE SET
+  designation = EXCLUDED.designation,
+  qualifications = EXCLUDED.qualifications,
+  specialization = EXCLUDED.specialization,
+  department_id = EXCLUDED.department_id;
+INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
+SELECT gen_random_uuid(), 'Dr. Israr Iqbal', 'Assistant Professor', 'Ph.D. in Software Engineering', 'Software Architecture, Distributed Systems, Software Design Patterns', d.id
+FROM public.departments d
+WHERE d.name = 'Software Engineering'
+LIMIT 1
+ON CONFLICT (name) DO UPDATE SET
+  designation = EXCLUDED.designation,
+  qualifications = EXCLUDED.qualifications,
+  specialization = EXCLUDED.specialization,
+  department_id = EXCLUDED.department_id;
+INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
+SELECT gen_random_uuid(), 'Dr. Naila Habib', 'Assistant Professor', 'Ph.D. in Software Engineering', 'Software Project Management, Software Evolution & Re-Engineering', d.id
+FROM public.departments d
+WHERE d.name = 'Software Engineering'
+LIMIT 1
+ON CONFLICT (name) DO UPDATE SET
+  designation = EXCLUDED.designation,
+  qualifications = EXCLUDED.qualifications,
+  specialization = EXCLUDED.specialization,
+  department_id = EXCLUDED.department_id;
+INSERT INTO public.teachers (id, name, designation, qualifications, specialization, department_id)
 SELECT gen_random_uuid(), 'Faculty (Islamic & Pak Studies)', 'Humanities Department', 'M.Phil in Islamic & Pakistan Studies', 'Islamic Jurisprudence, Constitutional History of Pakistan', d.id
 FROM public.departments d
 WHERE d.name = 'Computer Science'
@@ -352,13 +402,19 @@ ON CONFLICT (name) DO UPDATE SET
 
 -- 8. COURSES
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-101L', 'Programming Fundamentals Lab (G1) / ICT Lab (G2)', d.id, 1, 'Lab'
+SELECT gen_random_uuid(), 'CS-101L', 'Programming Fundamentals Lab (G1)', d.id, 1, 'Lab'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-102', 'Information & Communication Technology (ICT)', d.id, 2, 'Lecture'
+SELECT gen_random_uuid(), 'CS-102L', 'ICT Lab (G2)', d.id, 1, 'Lab'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-102', 'ICT', d.id, 2, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
@@ -370,19 +426,19 @@ WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'NS-101', 'Physics', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'PHY-101', 'Physics', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'MT-101', 'Basic Math - I', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'MATH-101', 'Basic Math - I', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'EN-101', 'Functional English', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'ENG-101', 'Functional English', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
@@ -406,153 +462,213 @@ WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'SE-101', 'Programming', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'CS-201L', 'Database Systems Lab (G1)', d.id, 1, 'Lab'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-201', 'Database Systems', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'MATH-201', 'Calculus & Analytical Geometry', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-202', 'Data Structures', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-202L', 'Data Structures Lab (G1)', d.id, 1, 'Lab'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'SE-201', 'Software Engineering', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'SS-201', 'Civics & Community Engagement', d.id, 2, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-203', 'Professional Practice', d.id, 2, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-301L', 'Assembly Language Lab (G1)', d.id, 1, 'Lab'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-301', 'Assembly Language', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-304', 'Web Technologies', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-302', 'Theory of Automata', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'MATH-301', 'Multivariate Calculus', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-303', 'Computer Networks', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-303L', 'Computer Networks Lab (G1)', d.id, 1, 'Lab'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-304L', 'Web Technologies Lab (G2)', d.id, 1, 'Lab'
+FROM public.departments d
+WHERE d.name = 'Computer Science'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'SE-301L', 'Software Design & Architecture Lab (G1)', d.id, 1, 'Lab'
 FROM public.departments d
 WHERE d.name = 'Software Engineering'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'SE-101L', 'Programming Lab (G1) / ICT Lab (G2)', d.id, 1, 'Lab'
+SELECT gen_random_uuid(), 'CS-305L', 'Computer Organization & Assembly Language Lab (G2)', d.id, 1, 'Lab'
 FROM public.departments d
 WHERE d.name = 'Software Engineering'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'SE-102', 'Computer Fundamentals (ICT)', d.id, 2, 'Lecture'
+SELECT gen_random_uuid(), 'SE-301', 'Software Design & Architecture', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Software Engineering'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'AI-101L', 'Programming Lab (G1) / ICT Lab (G2)', d.id, 1, 'Lab'
+SELECT gen_random_uuid(), 'CS-305', 'Computer Organization & Assembly Language', d.id, 3, 'Lecture'
+FROM public.departments d
+WHERE d.name = 'Software Engineering'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'AI-302', 'Machine Learning', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Artificial Intelligence'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'AI-101', 'Programming Fundamental', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'AI-301', 'Programming for AI', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Artificial Intelligence'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'AI-102', 'ICT', d.id, 2, 'Lecture'
+SELECT gen_random_uuid(), 'AI-302L', 'Machine Learning Lab (G1)', d.id, 1, 'Lab'
 FROM public.departments d
 WHERE d.name = 'Artificial Intelligence'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-301L', 'Database Systems Lab (G1)', d.id, 1, 'Lab'
+SELECT gen_random_uuid(), 'AI-301L', 'Programming for AI Lab (G2)', d.id, 1, 'Lab'
+FROM public.departments d
+WHERE d.name = 'Artificial Intelligence'
+LIMIT 1
+ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
+INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
+SELECT gen_random_uuid(), 'CS-403', 'Professional Practices', d.id, 2, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-301', 'Database Systems', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'CS-401', 'Compiler Construction', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'MT-201', 'Calculus & Analytical Geometry', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'CS-402', 'Information Security', d.id, 3, 'Lecture'
 FROM public.departments d
 WHERE d.name = 'Computer Science'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-302', 'Data Structures', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'CS-404L', 'Computer Graphics Lab (G1)', d.id, 1, 'Lab'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Software Engineering'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-303', 'Software Engineering', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'SE-402', 'Software Project Management', d.id, 3, 'Lecture'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Software Engineering'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-302L', 'Data Structures Lab (G1)', d.id, 1, 'Lab'
+SELECT gen_random_uuid(), 'SE-401', 'Software Re-Engineering', d.id, 3, 'Lecture'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Software Engineering'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-304', 'Discrete Structures', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'CS-404', 'Computer Graphics', d.id, 3, 'Lecture'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Software Engineering'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'MT-202', 'Linear Algebra', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'AI-402', 'Deep Learning', d.id, 3, 'Lecture'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Artificial Intelligence'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-305', 'Professional Ethics & Social Issues', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'AI-402L', 'Deep Learning Lab (G1)', d.id, 1, 'Lab'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Artificial Intelligence'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-501L', 'Assembly Language Lab (G1)', d.id, 1, 'Lab'
+SELECT gen_random_uuid(), 'STAT-401', 'Advance Statistics', d.id, 3, 'Lecture'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Artificial Intelligence'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-501', 'Assembly Language', d.id, 3, 'Lecture'
+SELECT gen_random_uuid(), 'AI-401', 'Agent Based Modeling', d.id, 3, 'Lecture'
 FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-502', 'Web Technologies', d.id, 3, 'Lecture'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'MT-301', 'Multivariate Calculus', d.id, 3, 'Lecture'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-503L', 'Computer Networks Lab (G1)', d.id, 1, 'Lab'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-701L', 'Programming for AI Labs (G1)', d.id, 1, 'Lab'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-701', 'Programming for AI', d.id, 3, 'Lecture'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-702', 'Professional Practices', d.id, 3, 'Lecture'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-703', 'Compiler Construction', d.id, 3, 'Lecture'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
-LIMIT 1
-ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
-INSERT INTO public.courses (id, code, name, department_id, credit_hours, type)
-SELECT gen_random_uuid(), 'CS-704', 'Information Security', d.id, 3, 'Lecture'
-FROM public.departments d
-WHERE d.name = 'Computer Science'
+WHERE d.name = 'Artificial Intelligence'
 LIMIT 1
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.credit_hours, type = EXCLUDED.type;
 
@@ -573,3517 +689,437 @@ SELECT
   sec.id,
   b.id,
   'CS-101L',
-  'Programming Fundamentals Lab (G1) / ICT Lab (G2)',
-  'Dr. Tauseef-ur-Rehman / Mr. Salahuddin',
-  'Lab 3 / Lab 4',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-102',
-  'Information & Communication Technology (ICT)',
-  'Mr. Salahuddin',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101',
-  'Programming Fundamentals',
+  'Programming Fundamentals Lab (G1)',
   'Dr. Tauseef-ur-Rehman',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math - I',
-  'Faculty (Mathematics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '08:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101L',
-  'Programming Fundamentals Lab (G2) / ICT Lab (G1)',
-  'Dr. Tauseef-ur-Rehman / Mr. Salahuddin',
-  'Lab 4 / Lab 3',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-102',
-  'Information & Communication Technology (ICT)',
-  'Mr. Salahuddin',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101',
-  'Programming Fundamentals',
-  'Dr. Tauseef-ur-Rehman',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math - I',
-  'Faculty (Mathematics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101',
-  'Programming Fundamentals',
-  'Dr. Tauseef-ur-Rehman',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math - I',
-  'Faculty (Mathematics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 5',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 5',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 2',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101',
-  'Programming Fundamentals',
-  'Dr. Tauseef-ur-Rehman',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-I',
-  'Faculty (Mathematics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 2',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101',
-  'Programming Fundamentals',
-  'Dr. Tauseef-ur-Rehman',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-I',
-  'Faculty (Mathematics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '08:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101L',
-  'Programming Fundamentals Lab (G1) / ICT Lab (G2)',
-  'Dr. Tauseef-ur-Rehman / Mr. Salahuddin',
-  'Lab 3 / Lab 4',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-102',
-  'Information & Communication Technology (ICT)',
-  'Mr. Salahuddin',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101',
-  'Programming Fundamentals',
-  'Dr. Tauseef-ur-Rehman',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-I',
-  'Faculty (Mathematics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '08:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-101L',
-  'Programming Fundamentals Lab (G2) / ICT Lab (G1)',
-  'Dr. Tauseef-ur-Rehman / Mr. Salahuddin',
-  'Lab 4 / Lab 3',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-102',
-  'Information & Communication Technology (ICT)',
-  'Mr. Salahuddin',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming',
-  'Dr. Muhammad Sajjad',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-1',
-  'Faculty (Mathematics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '02:00 PM',
-  '05:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101L',
-  'Programming Lab (G1) / ICT Lab (G2)',
-  'Dr. Muhammad Sajjad / Dr. Naveed Abbas',
-  'Lab 6 / Lab 5',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-102',
-  'Computer Fundamentals (ICT)',
-  'Dr. Naveed Abbas',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming',
-  'Dr. Muhammad Sajjad',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-1',
-  'Faculty (Mathematics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '02:00 PM',
-  '05:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101L',
-  'Programming Lab (G2) / ICT Lab (G1)',
-  'Dr. Muhammad Sajjad / Dr. Naveed Abbas',
-  'Lab 6 / Lab 5',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-102',
-  'Computer Fundamentals (ICT)',
-  'Dr. Naveed Abbas',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-1',
-  'Faculty (Mathematics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 2',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming',
-  'Dr. Muhammad Sajjad',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 2',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming (Tutorial)',
-  'Dr. Muhammad Sajjad',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming',
-  'Dr. Muhammad Sajjad',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-1',
-  'Faculty (Mathematics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-1',
-  'Faculty (Mathematics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pakistan Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming',
-  'Dr. Muhammad Sajjad',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math-1',
-  'Faculty (Mathematics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '02:00 PM',
-  '05:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101L',
-  'Programming Lab (G1) / ICT Lab (G2)',
-  'Dr. Muhammad Sajjad / Dr. Naveed Abbas',
-  'Lab 6 / Lab 5',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-102',
-  'Computer Fundamentals (ICT)',
-  'Dr. Naveed Abbas',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming',
-  'Dr. Muhammad Sajjad',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '02:00 PM',
-  '05:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101L',
-  'Programming Lab (G2) / ICT Lab (G1)',
-  'Dr. Muhammad Sajjad / Dr. Naveed Abbas',
-  'Lab 6 / Lab 5',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-102',
-  'Computer Fundamentals (ICT)',
-  'Dr. Naveed Abbas',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'SE-101',
-  'Programming',
-  'Dr. Muhammad Sajjad',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Software Engineering'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Software Engineering'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pak Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math 1',
-  'Faculty (Mathematics Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '06:00 PM',
-  '08:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'AI-101L',
-  'Programming Lab (G1) / ICT Lab (G2)',
-  'Dr. Naveed Abbas / Mr. Salahuddin',
-  'Lab 4 / Lab 1',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'HQ-101',
-  'Holy Quran',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'PS-101',
-  'Pak Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 6',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math 1',
-  'Faculty (Mathematics Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '06:00 PM',
-  '08:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'AI-101L',
-  'Programming Lab (G2) / ICT Lab (G1)',
-  'Dr. Naveed Abbas / Mr. Salahuddin',
-  'Lab 4 / Lab 1',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '01:00 PM',
-  '02:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'NS-101',
-  'Physics',
-  'Faculty (Physics Dept)',
-  'Room 7',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-101',
-  'Basic Math 1',
-  'Faculty (Mathematics Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '04:00 PM',
-  '05:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'AI-101',
-  'Programming Fundamental',
-  'Dr. Naveed Abbas',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '05:00 PM',
-  '06:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'AI-102',
-  'ICT',
-  'Mr. Salahuddin',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '12:00 PM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'IS-101',
-  'Islamic Studies',
-  'Faculty (Islamic & Pak Studies)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '04:00 PM',
-  '05:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'AI-101',
-  'Programming Fundamental',
-  'Dr. Naveed Abbas',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '05:00 PM',
-  '06:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'AI-102',
-  'ICT',
-  'Mr. Salahuddin',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  2
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'EN-101',
-  'Functional English',
-  'Faculty (English Dept)',
-  'Room 8',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '04:00 PM',
-  '05:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'AI-101',
-  'Programming Fundamental',
-  'Dr. Naveed Abbas',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
-JOIN public.semesters sem ON sem.name = '1st'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
-WHERE d.name = 'Artificial Intelligence'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '08:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-301L',
-  'Database Systems Lab (G1)',
-  'Dr. Atif Khan',
-  'Lab 2',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '11:00 AM',
-  '12:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-301',
-  'Database Systems',
-  'Dr. Atif Khan',
-  'Room 5',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-201',
-  'Calculus & Analytical Geometry',
-  'Faculty (Mathematics Dept)',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-302',
-  'Data Structures',
-  'Dr. Muhammad Waseem',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-302',
-  'Data Structures',
-  'Dr. Muhammad Waseem',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-303',
-  'Software Engineering',
-  'Dr. Khalid Haseeb',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '11:00 AM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-302L',
-  'Data Structures Lab (G1)',
-  'Dr. Muhammad Waseem',
-  'Lab 1',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Monday',
-  '03:00 PM',
-  '04:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-201',
-  'Calculus & Analytical Geometry',
-  'Faculty (Mathematics Dept)',
-  'Room 5',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-304',
-  'Discrete Structures',
-  'Dr. Khalid Haseeb',
-  'Room 2',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-301',
-  'Database Systems',
-  'Dr. Atif Khan',
-  'Room 1',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '11:00 AM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-302L',
-  'Data Structures Lab (G1)',
-  'Dr. Muhammad Waseem',
-  'Lab 2',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '02:00 PM',
-  '03:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-201',
-  'Calculus & Analytical Geometry',
-  'Faculty (Mathematics Dept)',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '08:00 AM',
-  '09:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-303',
-  'Software Engineering',
-  'Dr. Khalid Haseeb',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-302',
-  'Data Structures',
-  'Dr. Muhammad Waseem',
-  'Room 2',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '11:00 AM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-301L',
-  'Database Systems Lab (G2)',
-  'Dr. Atif Khan',
   'Lab 3',
   'CS Computing Laboratories',
   'Lab',
   1
 FROM public.departments d
 JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.semesters sem ON sem.name = '1st'
 JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G2)',
+  'Mr. Salahuddin',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Mr. Salahuddin',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Tauseef-ur-Rehman',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math - I',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Fundamentals Lab (G2)',
+  'Dr. Tauseef-ur-Rehman',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G1)',
+  'Mr. Salahuddin',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Mr. Salahuddin',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Tauseef-ur-Rehman',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math - I',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Tauseef-ur-Rehman',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math - I',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
 WHERE d.name = 'Computer Science'
 ON CONFLICT DO NOTHING;
 INSERT INTO public.timetable_entries (
@@ -4100,18 +1136,18 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-304',
-  'Discrete Structures',
-  'Dr. Khalid Haseeb',
-  'Room 3',
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 6',
   'CS Academic Block',
   'Lecture',
   3
 FROM public.departments d
 JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.semesters sem ON sem.name = '1st'
 JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
 WHERE d.name = 'Computer Science'
 ON CONFLICT DO NOTHING;
 INSERT INTO public.timetable_entries (
@@ -4128,18 +1164,718 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-303',
-  'Software Engineering',
-  'Dr. Khalid Haseeb',
-  'Room 1',
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 6',
   'CS Academic Block',
   'Lecture',
   3
 FROM public.departments d
 JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.semesters sem ON sem.name = '1st'
 JOIN public.sections sec ON sec.name = 'A'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Tauseef-ur-Rehman',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-I',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Tauseef-ur-Rehman',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-I',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Fundamentals Lab (G1)',
+  'Dr. Tauseef-ur-Rehman',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G2)',
+  'Mr. Salahuddin',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Mr. Salahuddin',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Tauseef-ur-Rehman',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-I',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Fundamentals Lab (G2)',
+  'Dr. Tauseef-ur-Rehman',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G1)',
+  'Mr. Salahuddin',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
 WHERE d.name = 'Computer Science'
 ON CONFLICT DO NOTHING;
 INSERT INTO public.timetable_entries (
@@ -4156,10 +1892,2250 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-301',
+  'CS-102',
+  'ICT',
+  'Mr. Salahuddin',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Sajjad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-1',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Lab (G1)',
+  'Dr. Sajjad',
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G2)',
+  'Dr. Naveed Abbas',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Sajjad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-1',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Lab (G2)',
+  'Dr. Sajjad',
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G1)',
+  'Dr. Naveed Abbas',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-1',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Sajjad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Sajjad',
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Sajjad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-1',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-1',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pakistan Studies',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Muhammad Sajjad',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math-1',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Lab (G1)',
+  'Dr. Muhammad Sajjad',
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G2)',
+  'Dr. Naveed Abbas',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Muhammad Sajjad',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Lab (G2)',
+  'Dr. Muhammad Sajjad',
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G1)',
+  'Dr. Naveed Abbas',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming',
+  'Dr. Muhammad Sajjad',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pak Studies',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math 1',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '05:00 PM',
+  '08:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Fundamentals Lab (G1)',
+  'Dr. Naveed Abbas',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '05:00 PM',
+  '08:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G2)',
+  'Mr. Salahuddin',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'HQ-101',
+  'Holy Quran',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PS-101',
+  'Pak Studies',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math 1',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '05:00 PM',
+  '08:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101L',
+  'Programming Fundamentals Lab (G2)',
+  'Dr. Naveed Abbas',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '05:00 PM',
+  '08:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102L',
+  'ICT Lab (G1)',
+  'Mr. Salahuddin',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'PHY-101',
+  'Physics',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-101',
+  'Basic Math 1',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Mr. Salahuddin',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'IS-101',
+  'Islamic Studies',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-102',
+  'ICT',
+  'Mr. Salahuddin',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'ENG-101',
+  'Functional English',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-101',
+  'Programming Fundamentals',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '1st'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2026 – 2030'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G1)',
+  'Dr. Atif Khan',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
   'Database Systems',
   'Dr. Atif Khan',
-  'Room 2',
+  'Room 5',
   'CS Academic Block',
   'Lecture',
   3
@@ -4176,15 +4152,43 @@ INSERT INTO public.timetable_entries (
 )
 SELECT
   gen_random_uuid(),
-  'Friday',
-  '08:30 AM',
-  '09:30 AM',
+  'Monday',
+  '02:00 PM',
+  '03:00 PM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-302',
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
   'Data Structures',
   'Dr. Muhammad Waseem',
   'Room 1',
@@ -4204,18 +4208,46 @@ INSERT INTO public.timetable_entries (
 )
 SELECT
   gen_random_uuid(),
-  'Friday',
-  '09:30 AM',
-  '10:30 AM',
+  'Tuesday',
+  '08:00 AM',
+  '11:00 AM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'MT-202',
-  'Linear Algebra',
-  'Faculty (Mathematics Dept)',
-  'Room 2',
+  'CS-201L',
+  'Database Systems Lab (G1)',
+  'Dr. Atif Khan',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Atif Khan',
+  'Room 5',
   'CS Academic Block',
   'Lecture',
   3
@@ -4232,17 +4264,17 @@ INSERT INTO public.timetable_entries (
 )
 SELECT
   gen_random_uuid(),
-  'Friday',
-  '10:30 AM',
-  '11:30 AM',
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-305',
-  'Professional Ethics & Social Issues',
-  'Dr. Tauseef-ur-Rehman',
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
   'Room 3',
   'CS Academic Block',
   'Lecture',
@@ -4261,80 +4293,24 @@ INSERT INTO public.timetable_entries (
 SELECT
   gen_random_uuid(),
   'Tuesday',
-  '09:00 AM',
-  '10:00 AM',
+  '03:00 PM',
+  '04:00 PM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-301',
-  'Database Systems',
-  'Dr. Atif Khan',
-  'Room 4',
+  'CS-202',
+  'Data Structures',
+  'Dr. Muhammad Waseem',
+  'Room 1',
   'CS Academic Block',
   'Lecture',
   3
 FROM public.departments d
 JOIN public.programs p ON p.name = 'BS Computer Science'
 JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-304',
-  'Discrete Structures',
-  'Dr. Khalid Haseeb',
-  'Room 5',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Tuesday',
-  '11:00 AM',
-  '01:00 PM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-301L',
-  'Database Systems Lab (G1)',
-  'Dr. Atif Khan',
-  'Lab 1',
-  'CS Computing Laboratories',
-  'Lab',
-  1
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
+JOIN public.sections sec ON sec.name = 'A'
 JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
 WHERE d.name = 'Computer Science'
 ON CONFLICT DO NOTHING;
@@ -4346,51 +4322,23 @@ SELECT
   gen_random_uuid(),
   'Wednesday',
   '08:00 AM',
-  '09:00 AM',
+  '11:00 AM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-302',
-  'Data Structures',
+  'CS-202L',
+  'Data Structures Lab (G1)',
   'Dr. Muhammad Waseem',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
 FROM public.departments d
 JOIN public.programs p ON p.name = 'BS Computer Science'
 JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Wednesday',
-  '09:00 AM',
-  '10:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-303',
-  'Software Engineering',
-  'Dr. Khalid Haseeb',
-  'Room 5',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
+JOIN public.sections sec ON sec.name = 'A'
 JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
 WHERE d.name = 'Computer Science'
 ON CONFLICT DO NOTHING;
@@ -4402,13 +4350,125 @@ SELECT
   gen_random_uuid(),
   'Wednesday',
   '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Atif Khan',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
   '01:00 PM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-302L',
+  'SE-201',
+  'Software Engineering',
+  'Dr. Khalid Haseeb',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Muhammad Waseem',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
   'Data Structures Lab (G2)',
   'Dr. Muhammad Waseem',
   'Lab 4',
@@ -4418,7 +4478,7 @@ SELECT
 FROM public.departments d
 JOIN public.programs p ON p.name = 'BS Computer Science'
 JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
+JOIN public.sections sec ON sec.name = 'A'
 JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
 WHERE d.name = 'Computer Science'
 ON CONFLICT DO NOTHING;
@@ -4429,6 +4489,62 @@ INSERT INTO public.timetable_entries (
 SELECT
   gen_random_uuid(),
   'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Khalid Haseeb',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
   '09:00 AM',
   '10:00 AM',
   d.id,
@@ -4436,7 +4552,147 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-303',
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Dr. Naveed Abbas',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Dr. Naveed Abbas',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Khalid Haseeb',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Muhammad Waseem',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
   'Software Engineering',
   'Dr. Khalid Haseeb',
   'Room 4',
@@ -4456,105 +4712,21 @@ INSERT INTO public.timetable_entries (
 )
 SELECT
   gen_random_uuid(),
-  'Thursday',
-  '10:00 AM',
-  '11:00 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-304',
-  'Discrete Structures',
-  'Dr. Khalid Haseeb',
-  'Room 2',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Thursday',
-  '11:00 AM',
+  'Monday',
   '12:00 PM',
+  '03:00 PM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-301',
-  'Database Systems',
-  'Dr. Atif Khan',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '08:30 AM',
-  '09:30 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'MT-202',
-  'Linear Algebra',
-  'Faculty (Mathematics Dept)',
-  'Room 4',
-  'CS Academic Block',
-  'Lecture',
-  3
-FROM public.departments d
-JOIN public.programs p ON p.name = 'BS Computer Science'
-JOIN public.semesters sem ON sem.name = '3rd'
-JOIN public.sections sec ON sec.name = 'B'
-JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
-WHERE d.name = 'Computer Science'
-ON CONFLICT DO NOTHING;
-INSERT INTO public.timetable_entries (
-  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
-  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
-)
-SELECT
-  gen_random_uuid(),
-  'Friday',
-  '09:30 AM',
-  '10:30 AM',
-  d.id,
-  p.id,
-  sem.id,
-  sec.id,
-  b.id,
-  'CS-302',
-  'Data Structures',
+  'CS-202L',
+  'Data Structures Lab (G1)',
   'Dr. Muhammad Waseem',
-  'Room 3',
-  'CS Academic Block',
-  'Lecture',
-  3
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
 FROM public.departments d
 JOIN public.programs p ON p.name = 'BS Computer Science'
 JOIN public.semesters sem ON sem.name = '3rd'
@@ -4568,17 +4740,17 @@ INSERT INTO public.timetable_entries (
 )
 SELECT
   gen_random_uuid(),
-  'Friday',
-  '10:30 AM',
-  '11:30 AM',
+  'Monday',
+  '03:00 PM',
+  '04:00 PM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-305',
-  'Professional Ethics & Social Issues',
-  'Dr. Tauseef-ur-Rehman',
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
   'Room 5',
   'CS Academic Block',
   'Lecture',
@@ -4596,15 +4768,2143 @@ INSERT INTO public.timetable_entries (
 )
 SELECT
   gen_random_uuid(),
-  'Monday',
+  'Tuesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Muhammad Waseem',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Muhammad Waseem',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
   '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Khalid Haseeb',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
+  'Data Structures Lab (G2)',
+  'Dr. Muhammad Waseem',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G1)',
+  'Dr. Atif Khan',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
   '01:00 PM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-501L',
+  'CS-201',
+  'Database Systems',
+  'Dr. Atif Khan',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Mr. Inaam Ul Haq',
+  'Stats Deptt',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G2)',
+  'Dr. Atif Khan',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Atif Khan',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Khalid Haseeb',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Mr. Inaam Ul Haq',
+  'Stats Deptt',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Atif Khan',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Shaukat Ali',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Naveed Abbas',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Irshad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G1)',
+  'Dr. Shaukat Ali',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Shaukat Ali',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Naveed Abbas',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Irshad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G2)',
+  'Dr. Shaukat Ali',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Shaukat Ali',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Naveed Abbas',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Irshad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
+  'Data Structures Lab (G1)',
+  'Dr. Irshad',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Mr. Inaam Ul Haq',
+  'Stats Deptt',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
+  'Data Structures Lab (G2)',
+  'Dr. Irshad',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Mr. Inaam Ul Haq',
+  'Stats Deptt',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Shaukat Ali',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Naveed Abbas',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
+  'Data Structures Lab (G1)',
+  'Dr. Irshad',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Shaukat Ali',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Naveed Abbas',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
+  'Data Structures Lab (G2)',
+  'Dr. Irshad',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Shaukat Ali',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Naveed Abbas',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G1)',
+  'Dr. Shaukat Ali',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Mr. Inaam Ul Haq',
+  'Stats Deptt',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Irshad',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G2)',
+  'Dr. Shaukat Ali',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Mr. Inaam Ul Haq',
+  'Stats Deptt',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Irshad',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Irshad',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Israr Iqbal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Bilal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '06:00 PM',
+  '09:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G1)',
+  'Dr. Bilal',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SS-201',
+  'Civics & Community Engagement',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Israr Iqbal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Bilal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '06:00 PM',
+  '09:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201L',
+  'Database Systems Lab (G2)',
+  'Dr. Bilal',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-201',
+  'Calculus & Analytical Geometry',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-201',
+  'Software Engineering',
+  'Dr. Israr Iqbal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-201',
+  'Database Systems',
+  'Dr. Bilal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '06:00 PM',
+  '09:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
+  'Data Structures Lab (G1)',
+  'Dr. Bilal',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Dr. Israr Iqbal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Bilal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '06:00 PM',
+  '09:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202L',
+  'Data Structures Lab (G2)',
+  'Dr. Bilal',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-203',
+  'Professional Practice',
+  'Dr. Israr Iqbal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Bilal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '06:00 PM',
+  '07:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-202',
+  'Data Structures',
+  'Dr. Bilal',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '3rd'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2025 – 2029'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301L',
   'Assembly Language Lab (G1)',
   'Mr. Faisal Saeed',
   'Lab 4',
@@ -4632,7 +6932,7 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-501',
+  'CS-301',
   'Assembly Language',
   'Mr. Faisal Saeed',
   'Room 5',
@@ -4660,10 +6960,430 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-502',
+  'CS-304',
   'Web Technologies',
   'Dr. Mansoor Nasir',
   'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301L',
+  'Assembly Language Lab (G2)',
+  'Mr. Faisal Saeed',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301',
+  'Assembly Language',
+  'Mr. Faisal Saeed',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304',
+  'Web Technologies',
+  'Dr. Mansoor Nasir',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Shaukat Ali',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Shaukat Ali',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Shaukat Ali',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Khalid Haseeb',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303L',
+  'Computer Networks Lab (G1)',
+  'Dr. Khalid Haseeb',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G2)',
+  'Dr. Mansoor Nasir',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303L',
+  'Computer Networks Lab (G2)',
+  'Dr. Khalid Haseeb',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G1)',
+  'Dr. Mansoor Nasir',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Khalid Haseeb',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 2',
   'CS Academic Block',
   'Lecture',
   3
@@ -4688,9 +7408,9 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'MT-301',
+  'MATH-301',
   'Multivariate Calculus',
-  'Faculty (Mathematics Dept)',
+  NULL,
   'Room 8',
   'CS Academic Block',
   'Lecture',
@@ -4716,7 +7436,7 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-502',
+  'CS-304',
   'Web Technologies',
   'Dr. Mansoor Nasir',
   'Room 4',
@@ -4744,7 +7464,7 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-503L',
+  'CS-303L',
   'Computer Networks Lab (G1)',
   'Dr. Khalid Haseeb',
   'Lab 6',
@@ -4772,7 +7492,7 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-501',
+  'CS-301',
   'Assembly Language',
   'Mr. Faisal Saeed',
   'Room 3',
@@ -4792,19 +7512,1979 @@ INSERT INTO public.timetable_entries (
 )
 SELECT
   gen_random_uuid(),
-  'Monday',
+  'Tuesday',
   '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303L',
+  'Computer Networks Lab (G2)',
+  'Dr. Khalid Haseeb',
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301',
+  'Assembly Language',
+  'Mr. Faisal Saeed',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Khalid Haseeb',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301L',
+  'Assembly Language Lab (G1)',
+  'Mr. Faisal Saeed',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G1)',
+  'Dr. Mansoor Nasir',
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Shaukat Ali',
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '09:00 AM',
   '10:00 AM',
   d.id,
   p.id,
   sem.id,
   sec.id,
   b.id,
-  'CS-701L',
-  'Programming for AI Labs (G1)',
+  'CS-304',
+  'Web Technologies',
+  'Dr. Mansoor Nasir',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Khalid Haseeb',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301L',
+  'Assembly Language Lab (G2)',
+  'Mr. Faisal Saeed',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G2)',
+  'Dr. Mansoor Nasir',
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Shaukat Ali',
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Shaukat Ali',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301L',
+  'Software Design & Architecture Lab (G1)',
+  'Dr. Israr Iqbal',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305L',
+  'Computer Organization & Assembly Language Lab (G2)',
+  NULL,
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303L',
+  'Computer Networks Lab (G1)',
+  'Dr. Israr Iqbal',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Israr Iqbal',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301L',
+  'Software Design & Architecture Lab (G2)',
+  'Dr. Israr Iqbal',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305L',
+  'Computer Organization & Assembly Language Lab (G1)',
+  NULL,
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303L',
+  'Computer Networks Lab (G2)',
+  'Dr. Israr Iqbal',
+  'Lab 3',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Israr Iqbal',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304',
+  'Web Technologies',
+  NULL,
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G1)',
+  NULL,
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301',
+  'Software Design & Architecture',
+  'Dr. Israr Iqbal',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305',
+  'Computer Organization & Assembly Language',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304',
+  'Web Technologies',
+  NULL,
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305',
+  'Computer Organization & Assembly Language',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G2)',
+  NULL,
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301',
+  'Software Design & Architecture',
+  'Dr. Israr Iqbal',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G1)',
+  NULL,
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304L',
+  'Web Technologies Lab (G2)',
+  NULL,
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 8',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301L',
+  'Software Design & Architecture Lab (G1)',
+  'Dr. Israr Iqbal',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305L',
+  'Computer Organization & Assembly Language Lab (G2)',
+  NULL,
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303L',
+  'Computer Networks Lab (G1)',
+  'Dr. Israr Iqbal',
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 6',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301L',
+  'Software Design & Architecture Lab (G2)',
+  'Dr. Israr Iqbal',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305L',
+  'Computer Organization & Assembly Language Lab (G1)',
+  NULL,
+  'Lab 6',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303L',
+  'Computer Networks Lab (G2)',
+  'Dr. Israr Iqbal',
+  'Room Unspecified',
+  'CS Academic Block',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304',
+  'Web Technologies',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-304',
+  'Web Technologies',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Israr Iqbal',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '09:00 AM',
+  '10:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-303',
+  'Computer Networks',
+  'Dr. Israr Iqbal',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301',
+  'Software Design & Architecture',
+  'Dr. Israr Iqbal',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-301',
+  'Software Design & Architecture',
+  'Dr. Israr Iqbal',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305',
+  'Computer Organization & Assembly Language',
+  NULL,
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-305',
+  'Computer Organization & Assembly Language',
+  NULL,
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-302',
+  'Machine Learning',
+  'Dr. Muhammad Sajjad',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Bilal',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '05:00 PM',
+  '08:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301L',
+  'Assembly Language Lab (G1)',
+  'Mr. Faisal Saeed',
+  'Lab Unspecified',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-302',
+  'Machine Learning',
+  'Dr. Muhammad Sajjad',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 7',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Bilal',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '05:00 PM',
+  '08:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301L',
+  'Assembly Language Lab (G2)',
+  'Mr. Faisal Saeed',
+  'Lab Unspecified',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301',
+  'Programming for AI',
+  'Dr. Atif Khan',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '02:00 PM',
+  '03:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'MATH-301',
+  'Multivariate Calculus',
+  NULL,
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301',
+  'Assembly Language',
+  'Mr. Faisal Saeed',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '04:00 PM',
+  '05:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-302',
+  'Theory of Automata',
+  'Dr. Bilal',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301',
+  'Programming for AI',
+  'Dr. Atif Khan',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-301',
+  'Assembly Language',
+  'Mr. Faisal Saeed',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '04:00 PM',
+  '07:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-302L',
+  'Machine Learning Lab (G1)',
+  'Dr. Muhammad Sajjad',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '04:00 PM',
+  '07:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301L',
+  'Programming for AI Lab (G2)',
+  'Dr. Atif Khan',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '04:00 PM',
+  '07:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-302L',
+  'Machine Learning Lab (G2)',
+  'Dr. Muhammad Sajjad',
+  'Lab 4',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '04:00 PM',
+  '07:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301L',
+  'Programming for AI Lab (G1)',
+  'Dr. Atif Khan',
+  'Lab 5',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '5th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2024 – 2028'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301L',
+  'Programming for AI Lab (G1)',
   'Dr. Muhammad Sajjad',
   'DIP Lab',
-  'Advanced Research Facility',
+  'CS Computing Laboratories',
   'Lab',
   1
 FROM public.departments d
@@ -4828,11 +9508,11 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-701',
+  'AI-301',
   'Programming for AI',
   'Dr. Muhammad Sajjad',
   'DIP Lab',
-  'Advanced Research Facility',
+  'CS Computing Laboratories',
   'Lecture',
   3
 FROM public.departments d
@@ -4856,11 +9536,291 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-702',
+  'CS-403',
   'Professional Practices',
   'Mr. Inaam Ul Haq',
-  'Stats Deptt',
+  'Stats Department',
   'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301L',
+  'Programming for AI Lab (G2)',
+  'Dr. Muhammad Sajjad',
+  'DIP Lab',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301',
+  'Programming for AI',
+  'Dr. Muhammad Sajjad',
+  'DIP Lab',
+  'CS Computing Laboratories',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-403',
+  'Professional Practices',
+  'Mr. Inaam Ul Haq',
+  'Stats Department',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-401',
+  'Compiler Construction',
+  'Mr. Muhammad Zubair',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-402',
+  'Information Security',
+  'Mr. Muhammad Zubair',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-403',
+  'Professional Practices',
+  'Mr. Inaam Ul Haq',
+  'Stats Department',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-401',
+  'Compiler Construction',
+  'Mr. Muhammad Zubair',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-402',
+  'Information Security',
+  'Mr. Muhammad Zubair',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-401',
+  'Compiler Construction',
+  'Mr. Muhammad Zubair',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-402',
+  'Information Security',
+  'Mr. Muhammad Zubair',
+  'Room 3',
+  'CS Academic Block',
   'Lecture',
   3
 FROM public.departments d
@@ -4884,7 +9844,7 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-703',
+  'CS-401',
   'Compiler Construction',
   'Mr. Muhammad Zubair',
   'Room 1',
@@ -4912,7 +9872,7 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-704',
+  'CS-402',
   'Information Security',
   'Mr. Muhammad Zubair',
   'Room 3',
@@ -4940,11 +9900,39 @@ SELECT
   sem.id,
   sec.id,
   b.id,
-  'CS-702',
+  'CS-403',
   'Professional Practices',
   'Mr. Inaam Ul Haq',
-  'Stats Deptt',
+  'Stats Department',
   'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-401',
+  'Compiler Construction',
+  'Mr. Muhammad Zubair',
+  'Room 1',
+  'CS Academic Block',
   'Lecture',
   3
 FROM public.departments d
@@ -4953,4 +9941,1096 @@ JOIN public.semesters sem ON sem.name = '7th'
 JOIN public.sections sec ON sec.name = 'B'
 JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
 WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-402',
+  'Information Security',
+  'Mr. Muhammad Zubair',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-403',
+  'Professional Practices',
+  'Mr. Inaam Ul Haq',
+  'Stats Department',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301L',
+  'Programming for AI Lab (G1)',
+  'Dr. Muhammad Sajjad',
+  'DIP Lab',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-401',
+  'Compiler Construction',
+  'Mr. Muhammad Zubair',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301',
+  'Programming for AI',
+  'Dr. Muhammad Sajjad',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '01:00 PM',
+  '02:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-403',
+  'Professional Practices',
+  'Mr. Inaam Ul Haq',
+  'Stats Department',
+  'Statistics & Allied Sciences Block',
+  'Lecture',
+  2
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301L',
+  'Programming for AI Lab (G2)',
+  'Dr. Muhammad Sajjad',
+  'DIP Lab',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-402',
+  'Information Security',
+  'Mr. Muhammad Zubair',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-301',
+  'Programming for AI',
+  'Dr. Muhammad Sajjad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Computer Science'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Computer Science'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404L',
+  'Computer Graphics Lab (G1)',
+  'Dr. Irshad',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-402',
+  'Software Project Management',
+  'Dr. Naila Habib',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404L',
+  'Computer Graphics Lab (G2)',
+  'Dr. Irshad',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-402',
+  'Software Project Management',
+  'Dr. Naila Habib',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-401',
+  'Software Re-Engineering',
+  'Dr. Naila Habib',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-402',
+  'Software Project Management',
+  'Dr. Naila Habib',
+  'Room 2',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-401',
+  'Software Re-Engineering',
+  'Dr. Naila Habib',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404',
+  'Computer Graphics',
+  'Dr. Irshad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-401',
+  'Software Re-Engineering',
+  'Dr. Naila Habib',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404',
+  'Computer Graphics',
+  'Dr. Irshad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-402',
+  'Software Project Management',
+  'Dr. Naila Habib',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-401',
+  'Software Re-Engineering',
+  'Dr. Naila Habib',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404',
+  'Computer Graphics',
+  'Dr. Irshad',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '08:00 AM',
+  '09:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-402',
+  'Software Project Management',
+  'Dr. Naila Habib',
+  'Room 5',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-401',
+  'Software Re-Engineering',
+  'Dr. Naila Habib',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '12:00 PM',
+  '01:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404',
+  'Computer Graphics',
+  'Dr. Irshad',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404L',
+  'Computer Graphics Lab (G1)',
+  'Dr. Irshad',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '08:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'CS-404L',
+  'Computer Graphics Lab (G2)',
+  'Dr. Irshad',
+  'Lab 1',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '10:00 AM',
+  '11:00 AM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-402',
+  'Software Project Management',
+  'Dr. Naila Habib',
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '11:00 AM',
+  '12:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'SE-401',
+  'Software Re-Engineering',
+  'Dr. Naila Habib',
+  'Room 4',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Software Engineering'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'B'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Software Engineering'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-402',
+  'Deep Learning',
+  'Dr. Muhammad Sajjad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Monday',
+  '06:00 PM',
+  '09:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-402L',
+  'Deep Learning Lab (G1)',
+  'Dr. Muhammad Sajjad',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-402',
+  'Deep Learning',
+  'Dr. Muhammad Sajjad',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Tuesday',
+  '06:00 PM',
+  '09:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-402L',
+  'Deep Learning Lab (G2)',
+  'Dr. Muhammad Sajjad',
+  'Lab 2',
+  'CS Computing Laboratories',
+  'Lab',
+  1
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'STAT-401',
+  'Advance Statistics',
+  NULL,
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Wednesday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-401',
+  'Agent Based Modeling',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'STAT-401',
+  'Advance Statistics',
+  NULL,
+  'Room 3',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Thursday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-401',
+  'Agent Based Modeling',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '03:00 PM',
+  '04:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'STAT-401',
+  'Advance Statistics',
+  NULL,
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
+ON CONFLICT DO NOTHING;
+INSERT INTO public.timetable_entries (
+  id, day, start_time, end_time, department_id, program_id, semester_id, section_id, batch_id, 
+  course_code, course_name, teacher_name, classroom_number, building, type, credit_hours
+)
+SELECT
+  gen_random_uuid(),
+  'Friday',
+  '05:00 PM',
+  '06:00 PM',
+  d.id,
+  p.id,
+  sem.id,
+  sec.id,
+  b.id,
+  'AI-401',
+  'Agent Based Modeling',
+  'Dr. Naveed Abbas',
+  'Room 1',
+  'CS Academic Block',
+  'Lecture',
+  3
+FROM public.departments d
+JOIN public.programs p ON p.name = 'BS Artificial Intelligence'
+JOIN public.semesters sem ON sem.name = '7th'
+JOIN public.sections sec ON sec.name = 'A'
+JOIN public.batches b ON b.name = 'Fall 2023 – 2027'
+WHERE d.name = 'Artificial Intelligence'
 ON CONFLICT DO NOTHING;

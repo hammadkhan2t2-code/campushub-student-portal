@@ -14,7 +14,11 @@ import {
   Building2,
   BookOpen,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Database,
+  Download,
+  Copy,
+  Check
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
@@ -101,7 +105,11 @@ export const TimetablePage: React.FC = () => {
       }
       if (semFilter !== 'All' && entry.semester !== semFilter) return false;
       if (secFilter !== 'All' && entry.section !== secFilter) return false;
-      if (batchFilter !== 'All' && entry.batch !== batchFilter) return false;
+      if (batchFilter !== 'All') {
+        const bNorm = batchFilter.replace(/[\s\u2013\u2014\-]/g, '');
+        const entryBNorm = (entry.batch || '').replace(/[\s\u2013\u2014\-]/g, '');
+        if (bNorm !== entryBNorm && entry.batch !== batchFilter) return false;
+      }
     }
 
     // Search query applies within the currently active view
@@ -131,6 +139,20 @@ export const TimetablePage: React.FC = () => {
     Wednesday: filteredEntries.filter((e) => e.day === 'Wednesday'),
     Thursday: filteredEntries.filter((e) => e.day === 'Thursday'),
     Friday: filteredEntries.filter((e) => e.day === 'Friday')
+  };
+
+  const [copiedSql, setCopiedSql] = useState(false);
+
+  const handleCopySql = async () => {
+    try {
+      const res = await fetch('/supabase_timetable_migration.sql');
+      const text = await res.text();
+      await navigator.clipboard.writeText(text);
+      setCopiedSql(true);
+      setTimeout(() => setCopiedSql(false), 2500);
+    } catch (err) {
+      console.error('Failed to copy SQL to clipboard', err);
+    }
   };
 
   const handlePrint = () => {
@@ -194,6 +216,40 @@ export const TimetablePage: React.FC = () => {
             <Printer size={15} />
             <span className="hidden sm:inline">Print Schedule</span>
           </button>
+
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200">
+            <a
+              href="/supabase_timetable_migration.sql"
+              download="supabase_timetable_migration.sql"
+              className="px-3 py-1.5 rounded-xl text-xs font-semibold hover:bg-slate-200 text-slate-700 transition-all flex items-center gap-1.5"
+              title="Download full 370-entry supabase_timetable_migration.sql"
+            >
+              <Download size={14} className="text-[#C5A059]" />
+              <span className="hidden sm:inline">Download SQL</span>
+            </a>
+
+            <button
+              onClick={handleCopySql}
+              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                copiedSql
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'hover:bg-slate-200 text-slate-700'
+              }`}
+              title="Copy entire 370-entry migration script directly to your clipboard"
+            >
+              {copiedSql ? (
+                <>
+                  <Check size={14} className="text-white" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={14} className="text-slate-500" />
+                  <span className="hidden sm:inline">Copy SQL</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   User,
   GraduationCap,
@@ -38,7 +38,6 @@ export const StudentProfilePage: React.FC = () => {
   } = useApp();
 
   const departmentOptions = departments.map((d) => d.name);
-  const degreeOptions = programs.map((p) => p.name);
   const semesterOptions = semesters.map((s) => s.name);
   const sectionOptions = sections.map((s) => s.name);
   const batchOptions = batches.map((b) => b.name);
@@ -54,6 +53,89 @@ export const StudentProfilePage: React.FC = () => {
   const [admissionBatch, setAdmissionBatch] = useState(currentUser?.admissionBatch || 'Fall 2025 – 2029');
   const [expectedGraduationYear, setExpectedGraduationYear] = useState(currentUser?.expectedGraduationYear || 2029);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Filter programs for the selected department using Supabase department_id
+  const selectedDeptRecord = useMemo(() => {
+    return departments.find(
+      (d) => d.name.toLowerCase() === department.toLowerCase() || d.id === department
+    );
+  }, [departments, department]);
+
+  const selectedDeptId = selectedDeptRecord?.id;
+
+  const filteredPrograms = useMemo(() => {
+    const matched = programs.filter((p) => {
+      if (selectedDeptId && p.department_id) {
+        return p.department_id === selectedDeptId;
+      }
+      const progDept = (p as any).department;
+      if (progDept && selectedDeptRecord) {
+        return progDept.toLowerCase() === selectedDeptRecord.name.toLowerCase();
+      }
+      if (department === 'Computer Science') return p.name === 'BS Computer Science';
+      if (department === 'Software Engineering') return p.name === 'BS Software Engineering';
+      if (department === 'Artificial Intelligence') return p.name === 'BS Artificial Intelligence';
+      return false;
+    });
+
+    if (matched.length > 0) return matched;
+
+    const fallbackName =
+      department === 'Software Engineering'
+        ? 'BS Software Engineering'
+        : department === 'Artificial Intelligence'
+        ? 'BS Artificial Intelligence'
+        : 'BS Computer Science';
+
+    return [{ id: `prog-${department}`, name: fallbackName, department_id: selectedDeptId }];
+  }, [programs, selectedDeptId, selectedDeptRecord, department]);
+
+  const degreeOptions = useMemo(() => {
+    return filteredPrograms.map((p) => p.name);
+  }, [filteredPrograms]);
+
+  const handleDepartmentChange = (newDept: string) => {
+    setDepartment(newDept);
+    const dRecord = departments.find(
+      (d) => d.name.toLowerCase() === newDept.toLowerCase() || d.id === newDept
+    );
+    const dId = dRecord?.id;
+
+    const matchedProgs = programs.filter((p) => {
+      if (dId && p.department_id) return p.department_id === dId;
+      const progDept = (p as any).department;
+      if (progDept && dRecord) return progDept.toLowerCase() === dRecord.name.toLowerCase();
+      if (newDept === 'Computer Science') return p.name === 'BS Computer Science';
+      if (newDept === 'Software Engineering') return p.name === 'BS Software Engineering';
+      if (newDept === 'Artificial Intelligence') return p.name === 'BS Artificial Intelligence';
+      return false;
+    });
+
+    const nextDeg = matchedProgs.length > 0
+      ? matchedProgs[0].name
+      : newDept === 'Software Engineering'
+      ? 'BS Software Engineering'
+      : newDept === 'Artificial Intelligence'
+      ? 'BS Artificial Intelligence'
+      : 'BS Computer Science';
+
+    setDegree(nextDeg);
+    if (rollNumber) {
+      setRollNumber(formatRollNumber(rollNumber, nextDeg));
+    }
+  };
+
+  const handleDegreeChange = (newDeg: string) => {
+    setDegree(newDeg);
+    const progMatch = programs.find((p) => p.name.toLowerCase() === newDeg.toLowerCase());
+    if (progMatch?.department_id) {
+      const dMatch = departments.find((d) => d.id === progMatch.department_id);
+      if (dMatch) setDepartment(dMatch.name);
+    }
+    if (rollNumber) {
+      setRollNumber(formatRollNumber(rollNumber, newDeg));
+    }
+  };
 
   // Sync state if currentUser changes
   React.useEffect(() => {
@@ -295,7 +377,7 @@ export const StudentProfilePage: React.FC = () => {
               {isEditing ? (
                 <select
                   value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
+                  onChange={(e) => handleDepartmentChange(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
                   {departmentOptions.map((d) => (
@@ -320,7 +402,7 @@ export const StudentProfilePage: React.FC = () => {
               {isEditing ? (
                 <select
                   value={degree}
-                  onChange={(e) => setDegree(e.target.value)}
+                  onChange={(e) => handleDegreeChange(e.target.value)}
                   className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#C5A059]/30 outline-none"
                 >
                   {degreeOptions.map((deg) => (

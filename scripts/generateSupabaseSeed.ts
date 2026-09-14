@@ -28,10 +28,7 @@ export function generateSeedSql(): string {
   const allDepartments: { name: string; code: string }[] = [
     { name: 'Computer Science', code: 'CS' },
     { name: 'Software Engineering', code: 'SE' },
-    { name: 'Artificial Intelligence', code: 'AI' },
-    { name: 'Mathematics', code: 'MATH' },
-    { name: 'Physics', code: 'PHYS' },
-    { name: 'Humanities', code: 'HUM' }
+    { name: 'Artificial Intelligence', code: 'AI' }
   ];
 
   for (const dept of allDepartments) {
@@ -139,9 +136,8 @@ ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, credit_hours = EXCLUDED.c
   lines.push('-- 9. TIMETABLE ENTRIES (Exact mapping from mockData.ts)');
   lines.push(`-- Ensures Section A and Section B records remain strictly segregated.`);
   for (const entry of ORIGINAL_TIMETABLE_ENTRIES) {
-    let programName = 'BS Computer Science';
-    if (entry.department === 'Software Engineering') programName = 'BS Software Engineering';
-    if (entry.department === 'Artificial Intelligence') programName = 'BS Artificial Intelligence';
+    const programName = entry.program || (entry.department === 'Software Engineering' ? 'BS Software Engineering' : entry.department === 'Artificial Intelligence' ? 'BS Artificial Intelligence' : 'BS Computer Science');
+    const teacherVal = entry.teacherName ? escapeSql(entry.teacherName) : 'NULL';
 
     // Lookups
     lines.push(`INSERT INTO public.timetable_entries (
@@ -160,7 +156,7 @@ SELECT
   b.id,
   ${escapeSql(entry.courseCode)},
   ${escapeSql(entry.courseName)},
-  ${escapeSql(entry.teacherName)},
+  ${teacherVal},
   ${escapeSql(entry.classroomNumber)},
   ${escapeSql(entry.building)},
   ${escapeSql(entry.type)},

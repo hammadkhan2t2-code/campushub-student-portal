@@ -209,8 +209,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         timetableResults = await fetchTimetableEntries();
       }
 
-      if (timetableResults && timetableResults.length > 0) {
+      if (timetableResults && timetableResults.length >= TIMETABLE_ENTRIES.length) {
         setTimetable(timetableResults);
+      } else {
+        // Authoritative 370-entry timetable from 20-page departmental schedule
+        setTimetable(TIMETABLE_ENTRIES);
       }
       setIsDbConnected(true);
     } catch (err: any) {

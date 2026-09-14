@@ -49,12 +49,18 @@ export async function fetchDepartments(): Promise<DepartmentRecord[]> {
   }
 }
 
-export async function fetchPrograms(): Promise<ProgramRecord[]> {
+export async function fetchPrograms(departmentId?: string): Promise<ProgramRecord[]> {
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from('programs')
       .select('*')
       .order('name');
+
+    if (departmentId) {
+      query = query.eq('department_id', departmentId);
+    }
+
+    const { data, error } = await query;
     if (error) {
       console.warn('Supabase fetchPrograms error:', error.message);
       return [];
@@ -68,6 +74,10 @@ export async function fetchPrograms(): Promise<ProgramRecord[]> {
     console.warn('Failed to fetch programs from Supabase:', err);
     return [];
   }
+}
+
+export async function fetchProgramsByDepartmentId(departmentId: string): Promise<ProgramRecord[]> {
+  return fetchPrograms(departmentId);
 }
 
 export async function fetchSemesters(): Promise<SemesterRecord[]> {
@@ -281,7 +291,7 @@ export async function fetchTimetableEntries(params?: TimetableFilterParams): Pro
         semester_name,
         section_name,
         batch_name,
-        courses ( id, name, code, credit_hours, type ),
+        courses ( id, name, code, credit_hours ),
         teachers ( id, name ),
         rooms ( id, room_number, building ),
         departments ( id, name ),
