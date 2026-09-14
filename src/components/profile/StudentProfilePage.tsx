@@ -26,7 +26,7 @@ import { RollNumberInput } from '../common/RollNumberInput';
 import { formatRollNumber, formatUserRollNumber } from '../../utils/rollNumberUtils';
 
 export const StudentProfilePage: React.FC = () => {
-  const { currentUser, updateProfile, signOut, openAuthModal } = useAuth();
+  const { currentUser, isLoading, updateProfile, signOut, openAuthModal } = useAuth();
   const {
     timetable,
     setActiveTab,
@@ -155,6 +155,18 @@ export const StudentProfilePage: React.FC = () => {
   const [showPasswordSection, setShowPasswordSection] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-3xl p-12 text-center border border-slate-200/80 shadow-sm max-w-lg mx-auto space-y-3">
+        <Loader2 size={32} className="animate-spin text-[#C5A059] mx-auto" />
+        <h2 className="text-base font-bold text-slate-900">Synchronizing Student Profile...</h2>
+        <p className="text-xs text-slate-500 max-w-xs mx-auto">
+          Restoring your authenticated session and loading your academic record.
+        </p>
+      </div>
+    );
+  }
 
   if (!currentUser) {
     return (

@@ -1,107 +1,157 @@
-import React, { useEffect, useState } from 'react';
-import { Loader2, CheckCircle2, AlertTriangle, ArrowRight, RefreshCw, LogIn } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Loader2, CheckCircle2, AlertTriangle, ArrowRight, LogIn } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
+import { User } from '../../types';
 
 interface AuthCallbackProps {
   onComplete?: () => void;
 }
 
 export const AuthCallback: React.FC<AuthCallbackProps> = ({ onComplete }) => {
-  const { currentUser, isLoading: authLoading, openAuthModal } = useAuth();
+  const { currentUser, refreshSession, openAuthModal } = useAuth();
   const { setActiveTab } = useApp();
 
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [processed, setProcessed] = useState(false);
+  const [resolvedUser, setResolvedUser] = useState<User | null>(null);
+
+  // Prevent multiple executions in React StrictMode
+  const hasExecutedRef = useRef(false);
 
   useEffect(() => {
-    let isCancelled = false;
+    if (hasExecutedRef.current) return;
+    hasExecutedRef.current = true;
+
+    let isMounted = true;
 
     async function handleAuthCallback() {
       try {
         const url = new URL(window.location.href);
         const code = url.searchParams.get('code');
         const tokenHash = url.searchParams.get('token_hash');
-        const type = url.searchParams.get('type') || 'signup';
-        const errorParam = url.searchParams.get('error') || (window.location.hash.includes('error=') ? 'access_denied' : null);
+        const typeParam = url.searchParams.get('type');
+        const errorParam =
+          url.searchParams.get('error') ||
+          (window.location.hash.includes('error=') ? 'access_denied' : null);
         const errorDescription = url.searchParams.get('error_description');
 
-        // Check for error in query or hash
+        // Check for error parameters in query or hash
         if (errorParam) {
           const cleanDesc = errorDescription
             ? decodeURIComponent(errorDescription.replace(/\+/g, ' '))
             : 'Authentication failed or your confirmation link has expired.';
-          if (!isCancelled) {
+          if (isMounted) {
             setErrorMessage(cleanDesc);
             setStatus('error');
           }
           return;
         }
 
-        // 1. Handle PKCE code exchange
-        if (code) {
-          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-          if (error) {
-            console.warn('AuthCallback exchangeCodeForSession error:', error.message);
-            // Check if session is already present despite error
-            const { data: currentSession } = await supabase.auth.getSession();
-            if (!currentSession.session) {
-              if (!isCancelled) {
-                setErrorMessage(error.message || 'Unable to exchange authentication code for a valid session.');
-                setStatus('error');
-              }
-              return;
-            }
-          }
-        }
-
-        // 2. Handle OTP token_hash email verification
-        if (tokenHash) {
-          const { data, error } = await supabase.auth.verifyOtp({
-            token_hash: tokenHash,
-            type: (type as any) || 'signup'
-          });
-          if (error) {
-            console.warn('AuthCallback verifyOtp error:', error.message);
-            const { data: currentSession } = await supabase.auth.getSession();
-            if (!currentSession.session) {
-              if (!isCancelled) {
-                setErrorMessage(error.message || 'Verification link is invalid or has expired.');
-                setStatus('error');
-              }
-              return;
-            }
-          }
-        }
-
-        // 3. Confirm active session
-        const { data: sessionData } = await supabase.auth.getSession();
-        if (sessionData.session) {
-          if (!isCancelled) {
+        // 1. Check if a valid session is ALREADY established
+        const { data: initialSession } = await supabase.auth.getSession();
+        if (initialSession.session?.user) {
+          const user = await refreshSession();
+          if (isMounted) {
+            setResolvedUser(user);
             setStatus('success');
-            setProcessed(true);
           }
-        } else {
-          // Wait briefly in case onAuthStateChange is in flight
-          const timer = setTimeout(async () => {
-            const { data: retryData } = await supabase.auth.getSession();
-            if (!isCancelled) {
-              if (retryData.session) {
-                setStatus('success');
-                setProcessed(true);
-              } else {
-                setErrorMessage('No active session found. Please sign in with your credentials.');
-                setStatus('error');
-              }
-            }
-          }, 1200);
+          return;
+        }
 
-          return () => clearTimeout(timer);
+        // 2. Handle OTP token_hash email confirmation flow
+        if (tokenHash) {
+          // IMPORTANT: Supabase verifyOtp for email confirmation MUST use type: 'email'
+          // Do NOT use 'signup' for the token_hash email confirmation flow.
+          const otpType = typeParam === 'recovery' ? 'recovery' : 'email';
+
+          const { data: otpData, error: otpError } = await supabase.auth.verifyOtp({
+            token_hash: tokenHash,
+            type: otpType
+          });
+
+          if (otpError) {
+            console.warn('AuthCallback verifyOtp note:', otpError.message);
+            // Double check if session was established despite error
+            const { data: checkSession } = await supabase.auth.getSession();
+            if (checkSession.session?.user) {
+              const user = await refreshSession();
+              if (isMounted) {
+                setResolvedUser(user);
+                setStatus('success');
+              }
+              return;
+            }
+
+            if (isMounted) {
+              setErrorMessage(otpError.message || 'Verification link is invalid or has expired.');
+              setStatus('error');
+            }
+            return;
+          }
+
+          // Verification succeeded
+          if (otpData.session?.user || otpData.user) {
+            const user = await refreshSession();
+            if (isMounted) {
+              setResolvedUser(user);
+              setStatus('success');
+            }
+            return;
+          }
+        }
+
+        // 3. Handle PKCE authorization code exchange
+        if (code) {
+          const { data: codeData, error: codeError } = await supabase.auth.exchangeCodeForSession(code);
+          if (codeError) {
+            console.warn('AuthCallback exchangeCodeForSession note:', codeError.message);
+            const { data: checkSession } = await supabase.auth.getSession();
+            if (checkSession.session?.user) {
+              const user = await refreshSession();
+              if (isMounted) {
+                setResolvedUser(user);
+                setStatus('success');
+              }
+              return;
+            }
+
+            if (isMounted) {
+              setErrorMessage(codeError.message || 'Unable to exchange authorization code for a valid session.');
+              setStatus('error');
+            }
+            return;
+          }
+
+          if (codeData.session?.user) {
+            const user = await refreshSession();
+            if (isMounted) {
+              setResolvedUser(user);
+              setStatus('success');
+            }
+            return;
+          }
+        }
+
+        // 4. Handle implicit hash tokens (e.g. #access_token=...)
+        const { data: finalSession } = await supabase.auth.getSession();
+        if (finalSession.session?.user) {
+          const user = await refreshSession();
+          if (isMounted) {
+            setResolvedUser(user);
+            setStatus('success');
+          }
+          return;
+        }
+
+        // If no token, code, or session found
+        if (isMounted) {
+          setErrorMessage('No active session or valid verification token found. Please sign in with your credentials.');
+          setStatus('error');
         }
       } catch (err: any) {
-        if (!isCancelled) {
+        if (isMounted) {
           setErrorMessage(err.message || 'An unexpected error occurred while verifying authentication.');
           setStatus('error');
         }
@@ -111,22 +161,27 @@ export const AuthCallback: React.FC<AuthCallbackProps> = ({ onComplete }) => {
     handleAuthCallback();
 
     return () => {
-      isCancelled = true;
+      isMounted = false;
     };
-  }, []);
+  }, [refreshSession]);
 
-  // When session is confirmed and currentUser is ready, clean URL and redirect
+  // When session is confirmed and user profile is loaded, clean URL and navigate to app
   useEffect(() => {
-    if (status === 'success' && !authLoading && currentUser) {
-      // Clean query parameters and hash from browser URL without reloading
-      window.history.replaceState({}, document.title, window.location.pathname === '/auth/callback' ? '/' : window.location.pathname);
+    if (status === 'success') {
+      // Clear token_hash, code, or hash tokens from browser URL without page reload
+      window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname === '/auth/callback' ? '/' : window.location.pathname
+      );
 
+      const targetUser = resolvedUser || currentUser;
       const timer = setTimeout(() => {
-        if (currentUser.needsProfileCompletion) {
-          // First-time Google user: send to profile setup
+        if (targetUser?.needsProfileCompletion) {
+          // First-time user requiring profile completion
           setActiveTab('profile');
         } else {
-          // Returning user or confirmed user with full profile: go directly to dashboard
+          // Confirmed student: go directly to authenticated dashboard
           setActiveTab('home');
         }
         if (onComplete) {
@@ -136,7 +191,7 @@ export const AuthCallback: React.FC<AuthCallbackProps> = ({ onComplete }) => {
 
       return () => clearTimeout(timer);
     }
-  }, [status, authLoading, currentUser, setActiveTab, onComplete]);
+  }, [status, resolvedUser, currentUser, setActiveTab, onComplete]);
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center p-4 sm:p-6">

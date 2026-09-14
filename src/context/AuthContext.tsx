@@ -47,6 +47,7 @@ interface AuthContextType {
   closeAuthModal: () => void;
   emailConfirmationPending: string | null;
   setEmailConfirmationPending: (email: string | null) => void;
+  refreshSession: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -68,45 +69,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const url = new URL(window.location.href);
         const code = url.searchParams.get('code');
         const tokenHash = url.searchParams.get('token_hash');
-        const type = url.searchParams.get('type') || 'signup';
+        const isCallbackRoute =
+          window.location.pathname.startsWith('/auth/callback') ||
+          !!tokenHash ||
+          !!code ||
+          (window.location.hash.includes('access_token=') && !window.location.hash.includes('#/'));
 
-        // 1. If PKCE authorization code is present in URL, exchange it for session
-        if (code) {
-          try {
-            const { data, error: exchangeErr } = await supabase.auth.exchangeCodeForSession(code);
-            if (exchangeErr) {
-              console.warn('initializeAuth exchangeCodeForSession note:', exchangeErr.message);
-            } else if (data.session?.user && isMounted) {
-              await loadUserProfile(data.session.user.id, data.session.user);
-              return;
-            }
-          } catch (e) {
-            console.warn('exchangeCodeForSession exception:', e);
+        // If on an auth callback route, the dedicated AuthCallback component will handle
+        // verification and invoke refreshSession. Do not race verifyOtp/exchangeCode here.
+        if (isCallbackRoute) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user && isMounted) {
+            await loadUserProfile(session.user.id, session.user);
           }
+          return;
         }
 
-        // 2. If OTP token_hash is present in URL (e.g. Supabase email verification template), verify it
-        if (tokenHash) {
-          try {
-            const { data, error: otpErr } = await supabase.auth.verifyOtp({
-              token_hash: tokenHash,
-              type: (type as any) || 'signup'
-            });
-            if (otpErr) {
-              console.warn('initializeAuth verifyOtp note:', otpErr.message);
-            } else if (data.session?.user && isMounted) {
-              await loadUserProfile(data.session.user.id, data.session.user);
-              return;
-            }
-          } catch (e) {
-            console.warn('verifyOtp exception:', e);
-          }
-        }
-
-        // 3. Normal session restore from localStorage or URL hash
+        // Standard session restore from localStorage or session cache
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
-          console.warn('Supabase getSession error:', error.message);
+          console.warn('Supabase getSession note:', error.message);
         }
 
         if (session?.user && isMounted) {
@@ -150,17 +132,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   /**
    * Loads the student's profile from public.profiles with metadata fallback
    */
-  const loadUserProfile = async (userId: string, authUser?: any) => {
+  const loadUserProfile = async (userId: string, authUser?: any): Promise<User | null> => {
     try {
       const profile = await fetchProfileById(userId);
 
       // Case 1: Returning student with an existing, complete profile
       if (profile && profile.rollNumber && profile.rollNumber.trim() !== '') {
-        setCurrentUser({
+        const studentUser: User = {
           ...profile,
           needsProfileCompletion: false
-        });
-        return;
+        };
+        setCurrentUser(studentUser);
+        return studentUser;
       }
 
       // Case 2: Profile row not found OR missing academic details.
@@ -204,11 +187,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const freshProfile = await fetchProfileById(userId);
         if (freshProfile) {
-          setCurrentUser({
+          const studentUser: User = {
             ...freshProfile,
             needsProfileCompletion: false
-          });
-          return;
+          };
+          setCurrentUser(studentUser);
+          return studentUser;
         }
 
         const fallbackUser: User = {
@@ -235,7 +219,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           needsProfileCompletion: false
         };
         setCurrentUser(fallbackUser);
-        return;
+        return fallbackUser;
       }
 
       // Case 3: First-time Google OAuth user (or user without academic details).
@@ -278,8 +262,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         needsProfileCompletion: true
       };
       setCurrentUser(firstTimeUser);
+      return firstTimeUser;
     } catch (err) {
       console.warn('Failed to load user profile:', err);
+      return null;
+    }
+  };
+
+  /**
+   * Explicitly refreshes the session and loads the user profile.
+   * Used by AuthCallback to guarantee the session and profile are loaded before redirecting.
+   */
+  const refreshSession = async (): Promise<User | null> => {
+    try {
+      setIsLoading(true);
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        console.warn('refreshSession getSession note:', error.message);
+      }
+      if (session?.user) {
+        const user = await loadUserProfile(session.user.id, session.user);
+        return user;
+      } else {
+        setCurrentUser(null);
+        return null;
+      }
+    } catch (err) {
+      console.warn('Error in refreshSession:', err);
+      return null;
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -757,7 +769,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         openAuthModal,
         closeAuthModal,
         emailConfirmationPending,
-        setEmailConfirmationPending
+        setEmailConfirmationPending,
+        refreshSession
       }}
     >
       {children}
