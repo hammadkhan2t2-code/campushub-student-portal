@@ -24,6 +24,7 @@ export interface User {
   semesterId?: string;
   sectionId?: string;
   batchId?: string;
+  needsProfileCompletion?: boolean;
 }
 
 export interface TimetableEntry {

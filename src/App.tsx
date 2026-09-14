@@ -17,6 +17,7 @@ import { TeachersPage } from './components/teachers/TeachersPage';
 import { LostFoundPage } from './components/lostfound/LostFoundPage';
 import { StudentProfilePage } from './components/profile/StudentProfilePage';
 import { DatabaseErrorBanner } from './components/common/DatabaseErrorBanner';
+import { AuthCallback } from './components/auth/AuthCallback';
 import {
   GraduationCap,
   Sparkles,
@@ -29,6 +30,21 @@ import {
 const MainLayout: React.FC = () => {
   const { activeTab, setActiveTab } = useApp();
   const { currentUser } = useAuth();
+  const [isAuthCallback, setIsAuthCallback] = React.useState(() => {
+    const path = window.location.pathname;
+    const search = window.location.search;
+    const hash = window.location.hash;
+    return (
+      path.startsWith('/auth/callback') ||
+      search.includes('code=') ||
+      search.includes('token_hash=') ||
+      (hash.includes('access_token=') && !hash.includes('#/'))
+    );
+  });
+
+  if (isAuthCallback) {
+    return <AuthCallback onComplete={() => setIsAuthCallback(false)} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-slate-900 flex flex-col font-sans selection:bg-[#C5A059]/20 selection:text-[#0F172A]">

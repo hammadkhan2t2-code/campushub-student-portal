@@ -42,16 +42,16 @@ export const StudentProfilePage: React.FC = () => {
   const sectionOptions = sections.map((s) => s.name);
   const batchOptions = batches.map((b) => b.name);
 
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(currentUser?.needsProfileCompletion || false);
   const [isSaving, setIsSaving] = useState(false);
   const [phone, setPhone] = useState(currentUser?.phone || '');
   const [department, setDepartment] = useState(currentUser?.department || 'Computer Science');
   const [degree, setDegree] = useState(currentUser?.degree || 'BS Computer Science');
   const [rollNumber, setRollNumber] = useState(currentUser?.rollNumber || '');
-  const [semester, setSemester] = useState(currentUser?.semester || '3rd');
+  const [semester, setSemester] = useState(currentUser?.semester || '1st');
   const [section, setSection] = useState(currentUser?.section || 'A');
-  const [admissionBatch, setAdmissionBatch] = useState(currentUser?.admissionBatch || 'Fall 2025 – 2029');
-  const [expectedGraduationYear, setExpectedGraduationYear] = useState(currentUser?.expectedGraduationYear || 2029);
+  const [admissionBatch, setAdmissionBatch] = useState(currentUser?.admissionBatch || 'Fall 2026 – 2030');
+  const [expectedGraduationYear, setExpectedGraduationYear] = useState(currentUser?.expectedGraduationYear || 2030);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Filter programs for the selected department using Supabase department_id
@@ -275,6 +275,22 @@ export const StudentProfilePage: React.FC = () => {
         </div>
       </div>
 
+      {currentUser.needsProfileCompletion && (
+        <div className="p-4 sm:p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 shadow-sm flex items-start gap-3.5 animate-in fade-in">
+          <div className="w-8 h-8 rounded-xl bg-[#C5A059] text-white flex items-center justify-center shrink-0 mt-0.5">
+            <Sparkles size={16} />
+          </div>
+          <div className="text-xs space-y-1">
+            <h3 className="font-bold text-sm text-slate-900">
+              Welcome to CampusHub! Complete Your Academic Enrollment
+            </h3>
+            <p className="text-slate-600 leading-relaxed">
+              You are signed in via Google ({currentUser.email}). Please fill in your degree program, roll number, semester, and section below to link your personalized timetable.
+            </p>
+          </div>
+        </div>
+      )}
+
       {message && (
         <div
           className={`p-4 rounded-2xl text-xs font-bold flex items-center gap-2 ${
@@ -302,10 +318,10 @@ export const StudentProfilePage: React.FC = () => {
               </h2>
               <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
                 <span className="font-mono font-bold text-slate-800 bg-slate-200/70 px-2 py-0.5 rounded">
-                  {formatUserRollNumber(currentUser)}
+                  {formatUserRollNumber(currentUser) || 'Enrollment Pending'}
                 </span>
                 <span>•</span>
-                <span>{currentUser.degree}</span>
+                <span>{currentUser.degree || 'Degree not selected'}</span>
               </div>
             </div>
           </div>

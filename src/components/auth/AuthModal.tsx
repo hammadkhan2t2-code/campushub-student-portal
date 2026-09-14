@@ -14,12 +14,34 @@ import {
   ArrowRight,
   ShieldCheck,
   Check,
-  Loader2
+  Loader2,
+  CheckCircle2
 } from 'lucide-react';
 import { useAuth, RegisterData } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
 import { RollNumberInput } from '../common/RollNumberInput';
 import { formatRollNumber } from '../../utils/rollNumberUtils';
+
+const GoogleIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
+  <svg className={className} viewBox="0 0 24 24">
+    <path
+      fill="#4285F4"
+      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+    />
+    <path
+      fill="#34A853"
+      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
+    />
+    <path
+      fill="#FBBC05"
+      d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
+    />
+    <path
+      fill="#EA4335"
+      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
+    />
+  </svg>
+);
 
 export const AuthModal: React.FC = () => {
   const {
@@ -28,8 +50,10 @@ export const AuthModal: React.FC = () => {
     closeAuthModal,
     openAuthModal,
     signIn,
+    signInWithGoogle,
     signUp,
-    resetPassword
+    resetPassword,
+    emailConfirmationPending
   } = useAuth();
   const { departments, programs, semesters, sections, batches } = useApp();
 
@@ -198,6 +222,21 @@ export const AuthModal: React.FC = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setSignInError('');
+    setRegError('');
+    setIsSubmitting(true);
+    try {
+      const result = await signInWithGoogle();
+      if (!result.success && result.error) {
+        setSignInError(result.error);
+        setRegError(result.error);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setRegError('');
@@ -311,8 +350,30 @@ export const AuthModal: React.FC = () => {
               <div className="text-center pb-2">
                 <h3 className="text-base font-bold text-slate-900">Student Sign In</h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Sign in with your campus roll number or student email address.
+                  Sign in with your Google account, campus roll number, or student email.
                 </p>
+              </div>
+
+              {/* Google OAuth Fast Sign-in */}
+              <button
+                type="button"
+                onClick={handleGoogleSignIn}
+                disabled={isSubmitting}
+                className="w-full py-2.5 px-4 bg-white hover:bg-slate-50 active:bg-slate-100 border border-slate-300 hover:border-slate-400 text-slate-700 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer"
+              >
+                <GoogleIcon className="w-4 h-4 shrink-0" />
+                <span>Continue with Google</span>
+              </button>
+
+              <div className="relative my-3">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-200" />
+                </div>
+                <div className="relative flex justify-center text-[11px] uppercase">
+                  <span className="bg-white px-2.5 text-slate-400 font-semibold tracking-wider">
+                    or sign in with roll number / email
+                  </span>
+                </div>
               </div>
 
               {signInError && (
@@ -411,6 +472,28 @@ export const AuthModal: React.FC = () => {
               {/* STEP 1: Personal & Account Credentials */}
               {regStep === 1 && (
                 <div className="space-y-3.5 animate-in fade-in duration-150">
+                  {/* Google OAuth Option */}
+                  <button
+                    type="button"
+                    onClick={handleGoogleSignIn}
+                    disabled={isSubmitting}
+                    className="w-full py-2.5 px-4 bg-white hover:bg-slate-50 active:bg-slate-100 border border-slate-300 hover:border-slate-400 text-slate-700 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer"
+                  >
+                    <GoogleIcon className="w-4 h-4 shrink-0" />
+                    <span>Quick Sign Up with Google</span>
+                  </button>
+
+                  <div className="relative my-2">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-200" />
+                    </div>
+                    <div className="relative flex justify-center text-[11px] uppercase">
+                      <span className="bg-white px-2.5 text-slate-400 font-semibold tracking-wider">
+                        or register with student email
+                      </span>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -818,6 +901,44 @@ export const AuthModal: React.FC = () => {
                   className="text-xs text-[#C5A059] font-bold hover:underline"
                 >
                   Return to Sign In
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 4. EMAIL CONFIRMATION SENT VIEW */}
+          {authModalMode === 'confirmation-sent' && (
+            <div className="text-center py-3 space-y-4 animate-in fade-in duration-200">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto shadow-sm">
+                <Mail size={32} />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-base font-bold text-slate-900">Check Your Student Inbox</h3>
+                <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+                  We have dispatched an official email verification link to:
+                </p>
+                <div className="py-1 px-3 bg-slate-100 border border-slate-200 rounded-lg inline-block font-mono text-xs font-semibold text-slate-800">
+                  {emailConfirmationPending || regData.email}
+                </div>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto pt-2 leading-relaxed">
+                  Please open the confirmation email and click <span className="font-bold text-slate-800">Confirm your mail</span>. CampusHub will automatically activate your profile and redirect you directly to your class timetable.
+                </p>
+              </div>
+
+              <div className="pt-2 flex flex-col gap-2 max-w-xs mx-auto">
+                <button
+                  type="button"
+                  onClick={() => openAuthModal('signin')}
+                  className="w-full py-2.5 px-4 bg-[#0F172A] hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
+                >
+                  Return to Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={closeAuthModal}
+                  className="w-full py-2 px-4 text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors"
+                >
+                  Dismiss
                 </button>
               </div>
             </div>

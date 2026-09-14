@@ -36,14 +36,17 @@ interface AuthContextType {
   isLoading: boolean;
   isSubmitting: boolean;
   signIn: (identifier: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  signUp: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
+  signInWithGoogle: () => Promise<{ success: boolean; error?: string }>;
+  signUp: (data: RegisterData) => Promise<{ success: boolean; error?: string; confirmationPending?: boolean }>;
   signOut: () => Promise<void>;
   resetPassword: (emailOrRoll: string, newPassword?: string) => Promise<{ success: boolean; message: string }>;
   updateProfile: (updatedData: Partial<User>) => Promise<{ success: boolean; error?: string }>;
   isAuthModalOpen: boolean;
-  authModalMode: 'signin' | 'signup' | 'reset';
-  openAuthModal: (mode?: 'signin' | 'signup' | 'reset') => void;
+  authModalMode: 'signin' | 'signup' | 'reset' | 'confirmation-sent';
+  openAuthModal: (mode?: 'signin' | 'signup' | 'reset' | 'confirmation-sent') => void;
   closeAuthModal: () => void;
+  emailConfirmationPending: string | null;
+  setEmailConfirmationPending: (email: string | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -53,7 +56,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup' | 'reset'>('signin');
+  const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup' | 'reset' | 'confirmation-sent'>('signin');
+  const [emailConfirmationPending, setEmailConfirmationPending] = useState<string | null>(null);
 
   // Listen to Supabase Auth state changes & load user profile from public.profiles
   useEffect(() => {
@@ -61,6 +65,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     async function initializeAuth() {
       try {
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get('code');
+        const tokenHash = url.searchParams.get('token_hash');
+        const type = url.searchParams.get('type') || 'signup';
+
+        // 1. If PKCE authorization code is present in URL, exchange it for session
+        if (code) {
+          try {
+            const { data, error: exchangeErr } = await supabase.auth.exchangeCodeForSession(code);
+            if (exchangeErr) {
+              console.warn('initializeAuth exchangeCodeForSession note:', exchangeErr.message);
+            } else if (data.session?.user && isMounted) {
+              await loadUserProfile(data.session.user.id, data.session.user);
+              return;
+            }
+          } catch (e) {
+            console.warn('exchangeCodeForSession exception:', e);
+          }
+        }
+
+        // 2. If OTP token_hash is present in URL (e.g. Supabase email verification template), verify it
+        if (tokenHash) {
+          try {
+            const { data, error: otpErr } = await supabase.auth.verifyOtp({
+              token_hash: tokenHash,
+              type: (type as any) || 'signup'
+            });
+            if (otpErr) {
+              console.warn('initializeAuth verifyOtp note:', otpErr.message);
+            } else if (data.session?.user && isMounted) {
+              await loadUserProfile(data.session.user.id, data.session.user);
+              return;
+            }
+          } catch (e) {
+            console.warn('verifyOtp exception:', e);
+          }
+        }
+
+        // 3. Normal session restore from localStorage or URL hash
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
           console.warn('Supabase getSession error:', error.message);
@@ -81,8 +124,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initializeAuth();
 
     // Subscribe to auth state updates (sign in, sign out, token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!isMounted) return;
+
+      if (event === 'SIGNED_OUT') {
+        setCurrentUser(null);
+        setIsLoading(false);
+        return;
+      }
 
       if (session?.user) {
         await loadUserProfile(session.user.id, session.user);
@@ -104,22 +153,72 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loadUserProfile = async (userId: string, authUser?: any) => {
     try {
       const profile = await fetchProfileById(userId);
-      if (profile) {
-        setCurrentUser(profile);
+
+      // Case 1: Returning student with an existing, complete profile
+      if (profile && profile.rollNumber && profile.rollNumber.trim() !== '') {
+        setCurrentUser({
+          ...profile,
+          needsProfileCompletion: false
+        });
         return;
       }
 
-      // If database trigger has not finished or profile row is empty, construct from authUser metadata
-      if (authUser?.user_metadata) {
-        const meta = authUser.user_metadata;
+      // Case 2: Profile row not found OR missing academic details.
+      // Check if user registered via email + password with academic details in metadata
+      const meta = authUser?.user_metadata || {};
+      const metaRoll = meta.roll_number || meta.rollNumber;
+      const metaDept = meta.department_name || meta.department;
+      const metaDegree = meta.program_name || meta.degree;
+
+      if (metaRoll && metaDept) {
+        // User registered with email + password and provided academic details.
+        // Save complete profile to public.profiles now that user session is active
+        try {
+          await supabase.from('profiles').upsert({
+            id: userId,
+            first_name: meta.first_name || meta.firstName || 'Student',
+            last_name: meta.last_name || meta.lastName || '',
+            full_name: meta.full_name || `${meta.first_name || ''} ${meta.last_name || ''}`.trim() || 'Student',
+            roll_number: metaRoll,
+            email: authUser.email || meta.email || '',
+            phone: meta.phone || null,
+            bio: meta.bio || null,
+            department_id: meta.department_id || null,
+            program_id: meta.program_id || null,
+            semester_id: meta.semester_id || null,
+            section_id: meta.section_id || null,
+            batch_id: meta.batch_id || null,
+            department: metaDept,
+            degree: metaDegree || 'BS Computer Science',
+            semester: meta.semester_name || meta.semester || '1st',
+            section: meta.section_name || meta.section || 'A',
+            admission_batch: meta.batch_name || meta.admission_batch || meta.admissionBatch || 'Fall 2026 – 2030',
+            admission_year: Number(meta.admission_year || meta.admissionYear) || 2026,
+            expected_graduation_year: Number(meta.expected_graduation_year || meta.expectedGraduationYear) || 2030,
+            avatar_color: meta.avatar_color || '#0F172A',
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'id' });
+        } catch (upsertErr) {
+          console.warn('Auto-upsert profile note:', upsertErr);
+        }
+
+        const freshProfile = await fetchProfileById(userId);
+        if (freshProfile) {
+          setCurrentUser({
+            ...freshProfile,
+            needsProfileCompletion: false
+          });
+          return;
+        }
+
         const fallbackUser: User = {
           id: userId,
           firstName: meta.first_name || meta.firstName || 'Student',
           lastName: meta.last_name || meta.lastName || '',
-          rollNumber: meta.roll_number || meta.rollNumber || '',
+          rollNumber: metaRoll,
           email: authUser.email || meta.email || '',
-          department: meta.department_name || meta.department || 'Computer Science',
-          degree: meta.program_name || meta.degree || 'BS Computer Science',
+          department: metaDept,
+          degree: metaDegree || 'BS Computer Science',
           semester: meta.semester_name || meta.semester || '1st',
           section: meta.section_name || meta.section || 'A',
           admissionBatch: meta.batch_name || meta.admission_batch || meta.admissionBatch || 'Fall 2026 – 2030',
@@ -132,10 +231,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           programId: meta.program_id,
           semesterId: meta.semester_id,
           sectionId: meta.section_id,
-          batchId: meta.batch_id
+          batchId: meta.batch_id,
+          needsProfileCompletion: false
         };
         setCurrentUser(fallbackUser);
+        return;
       }
+
+      // Case 3: First-time Google OAuth user (or user without academic details).
+      // DO NOT INVENT: Roll number, Department, Program, Semester, Section, Batch, Graduation year!
+      const fullName = meta.full_name || meta.name || '';
+      const nameParts = fullName.trim().split(' ');
+      const firstName = meta.first_name || (nameParts[0] || 'Student');
+      const lastName = meta.last_name || nameParts.slice(1).join(' ');
+      const email = authUser?.email || meta.email || '';
+
+      // Upsert baseline record with ONLY their identity and email, NO invented academic data
+      try {
+        await supabase.from('profiles').upsert({
+          id: userId,
+          first_name: firstName,
+          last_name: lastName,
+          full_name: fullName || `${firstName} ${lastName}`.trim(),
+          email: email,
+          avatar_color: '#0F172A',
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+      } catch (baseUpsertErr) {
+        console.warn('Base profile upsert note:', baseUpsertErr);
+      }
+
+      const firstTimeUser: User = {
+        id: userId,
+        firstName,
+        lastName,
+        rollNumber: '',
+        email,
+        department: '',
+        degree: '',
+        semester: '',
+        section: '',
+        admissionBatch: '',
+        admissionYear: new Date().getFullYear(),
+        expectedGraduationYear: new Date().getFullYear() + 4,
+        avatarColor: '#0F172A',
+        needsProfileCompletion: true
+      };
+      setCurrentUser(firstTimeUser);
     } catch (err) {
       console.warn('Failed to load user profile:', err);
     }
@@ -233,7 +375,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * Creates real Supabase Auth account and passes student's academic information as user metadata
    * so the database trigger can create the corresponding profile in public.profiles.
    */
-  const signUp = async (data: RegisterData): Promise<{ success: boolean; error?: string }> => {
+  const signUp = async (data: RegisterData): Promise<{ success: boolean; error?: string; confirmationPending?: boolean }> => {
     if (!data.firstName.trim() || !data.lastName.trim()) {
       return { success: false, error: 'First name and Last name are required.' };
     }
@@ -319,12 +461,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         avatar_color: '#0F172A'
       };
 
-      // Real Supabase Auth signUp
+      // Real Supabase Auth signUp with emailRedirectTo
+      const redirectUrl = `${window.location.origin}/auth/callback`;
       const { data: authResult, error: signUpError } = await supabase.auth.signUp({
         email: data.email.trim().toLowerCase(),
         password: data.password,
         options: {
-          data: academicMetadata
+          data: academicMetadata,
+          emailRedirectTo: redirectUrl
         }
       });
 
@@ -370,10 +514,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.warn('Profile upsert note:', profileErr);
         }
 
+        // Check if email confirmation is required before session is active
+        if (!authResult.session) {
+          setEmailConfirmationPending(data.email.trim().toLowerCase());
+          setAuthModalMode('confirmation-sent');
+          setIsSubmitting(false);
+          return { success: true, confirmationPending: true };
+        }
+
         await loadUserProfile(authResult.user.id, authResult.user);
         closeAuthModal();
         setIsSubmitting(false);
-        return { success: true };
+        return { success: true, confirmationPending: false };
       }
 
       setIsSubmitting(false);
@@ -388,6 +540,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
       }
       return { success: false, error: err.message || 'Failed to create student account.' };
+    }
+  };
+
+  /**
+   * Google OAuth sign-in via Supabase Auth
+   */
+  const signInWithGoogle = async (): Promise<{ success: boolean; error?: string }> => {
+    setIsSubmitting(true);
+    try {
+      const redirectUrl = `${window.location.origin}/auth/callback`;
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: redirectUrl
+        }
+      });
+
+      if (error) {
+        setIsSubmitting(false);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (err: any) {
+      setIsSubmitting(false);
+      return { success: false, error: err.message || 'Failed to initiate Google authentication.' };
     }
   };
 
@@ -549,7 +727,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         programId,
         semesterId,
         sectionId,
-        batchId
+        batchId,
+        needsProfileCompletion: false
       };
       setCurrentUser(updatedUser);
       setIsSubmitting(false);
@@ -568,6 +747,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         isSubmitting,
         signIn,
+        signInWithGoogle,
         signUp,
         signOut,
         resetPassword,
@@ -575,7 +755,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAuthModalOpen,
         authModalMode,
         openAuthModal,
-        closeAuthModal
+        closeAuthModal,
+        emailConfirmationPending,
+        setEmailConfirmationPending
       }}
     >
       {children}
